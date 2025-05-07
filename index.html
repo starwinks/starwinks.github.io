@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑神话领域大神 | 神话殿堂</title>
+    <!-- 引入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --text-color: #333;
+            --gradient-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--gradient-bg);
+            color: var(--text-color);
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            padding: 1rem 5%;
+        }
+
+        /* 主内容区 */
+        .hero {
+            flex: 1;
+            padding: 4rem 5%;
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* 链接按钮 */
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 1.5rem 0;
+            background: var(--accent-color);
+            color: white !important;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+
+        /* 动态效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>黑神话领域大神|神话殿堂</h2>
+    </nav>
+
+    <main class="hero">
+        <h1>欢迎来到神话殿堂</h1>
+        
+        <div class="content">
+            <p class="lead-text">探索黑神话领域的奥秘，见证大神的探索旅程</p>
+            
+            <div class="info-section">
+                <p>🌟 这里是黑神话领域大神的数字圣殿，汇聚最新动态、深度解析与独家内容</p>
+                <p>📚 定期更新技术洞见、故事进展与独家消息</p>
+                
+                <a href="https://github.com/miraclrmaker" class="cta-button">
+                    🚀 开启黑神话之旅 →
+                </a>
+            </div>
+
+            <div class="contact-section">
+                <h3>神圣连接</h3>
+                <p>📧 合作邀约 | 技术探讨 | 灵感交流</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 黑神话领域大神.All rights reserved.</p>
+        <p>🪄 由代码魔法铸造</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,15 @@
+/* 添加到自定义CSS文件 */
+a[href^="https://github.com/"] img {
+  background: rgba(26, 26, 26, 0.7) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+a[href^="https://github.com/"] img:hover {
+  background: rgba(26, 26, 26, 0.9) !important;
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}

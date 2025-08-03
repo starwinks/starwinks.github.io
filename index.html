@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" color-mode="light">
+<html lang="en" color-mode="light">
 
   <head>
   <meta charset="utf-8">
@@ -13,7 +13,7 @@
   
   <title>
     
-     星海
+     starwinks
   </title>
 
   
@@ -46,8 +46,6 @@
 
   
 
-  
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   
 
   <script>
@@ -143,13 +141,21 @@
               
         </li>
         
+        <li>
+          
+            <a title="email" href="mailto:241220117@smail.nju.edu.cn">
+              <i class="iconfont icon-envelope"></i>
+            </a>
+            
+        </li>
+        
     </ul>
   </div>
   
     
     <div class="footer-more">
       
-        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2025 Oranges</a>
+        <a target="_blank" rel="noopener" href="https://github.com/starwinks">Copyright © 2025 starwinks</a>
         
     </div>
   
@@ -160,19 +166,6 @@
         
     </div>
   
-  
-    <div class="footer-views">
-      
-          本站总访问量<span id="busuanzi_value_site_pv"></span>次
-        
-      
-          本文总阅读量<span id="busuanzi_value_page_pv"></span>次
-        
-      
-          本站访客数<span id="busuanzi_value_site_uv"></span>人
-        
-      
-    </div>
   
 </div>
 
@@ -206,7 +199,7 @@
           </a>
         </span>
         
-          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
         
         <span class="search-close-icon" id="search-close-icon">
           <a href="javascript: void(0)">
@@ -258,7 +251,7 @@
       'use strict';
       var $input = document.getElementById(search_id);
       var $resultContent = document.getElementById(content_id);
-      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
       $.ajax({
         // 0x01. load xml file
         url: path,
@@ -354,7 +347,7 @@
             });
             str += "</ul>";
             if (str.indexOf('<li>') === -1) {
-              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
             }
             $resultContent.innerHTML = str;
           });
@@ -362,9 +355,9 @@
         error: function(xhr, status, error) {
           $resultContent.innerHTML = ""
           if (xhr.status === 404) {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
           } else {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
           }
         }
       });

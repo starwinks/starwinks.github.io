@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" color-mode="light">
+<html lang="en" color-mode="light">
 
   <head>
   <meta charset="utf-8">
@@ -13,12 +13,12 @@
   
   <title>
     
-      朋友 
+      Friend 
       
       
       |
     
-     星海
+     starwinks
   </title>
 
   
@@ -51,8 +51,6 @@
 
   
 
-  
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   
 
   <script>
@@ -114,27 +112,12 @@
 <!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
 
-  <!-- LaTex Display -->
-
-  
-    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
-  
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    }
-  </script>
-
-
-
 
 
   <!-- clipboard -->
 
   
-    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
   
   
 <script src="/js/codeCopy.js"></script>
@@ -158,7 +141,7 @@
       <div class="post-title">friends</div>
       <div class="post-attach">
         <span class="post-pubtime">
-          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
           2025-08-03 14:39:52
         </span>
         
@@ -173,7 +156,7 @@
           </div>
           <div class="post-attach">
             <span class="post-pubtime">
-              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
               2025-08-03 14:39:52
             </span>
             
@@ -186,6 +169,97 @@
     </div>
     
 
+    
+      <div class="comments-container">
+        <!-- C:\Users\starwink\桌面\my-blog\themes\oranges\layout\_partial\comments.ejs -->
+
+  <!-- 评论容器 -->
+  <div id="gitalk-container"></div>
+  
+  <!-- 加载状态指示器 -->
+  <div id="gitalk-loading" style="text-align:center;padding:20px;">
+    <p>正在加载评论系统...</p>
+  </div>
+  
+  <!-- 手动初始化按钮（仅管理员可见） -->
+  <div id="gitalk-init" style="display:none;text-align:center;margin-top:20px;">
+    <button onclick="initGitalk()" class="btn">管理员初始化评论</button>
+  </div>
+
+  <script>
+    // 全局 Gitalk 实例
+    let gitalkInstance = null;
+    
+    // 初始化 Gitalk
+    function initGitalk() {
+      console.log("初始化函数被调用"); // 调试日志
+      
+      try {
+        // 创建 Gitalk 实例（简化版）
+        gitalkInstance = new Gitalk({
+          clientID: 'Ov23li3x8SRSG3fRByes',
+          repo: 'starwinks.github.io',
+          owner: 'starwinks',
+          admin: ['starwinks'],
+          id: location.pathname,
+          proxy: 'https://corsproxy.io/?',
+          createIssueManually: true
+        });
+        
+        // 渲染评论框
+        renderGitalk();
+      } catch (initError) {
+        console.error('初始化错误:', initError);
+        alert('初始化失败: ' + initError.message);
+      }
+    }
+    
+    // 渲染函数（添加详细日志）
+    function renderGitalk(attempt = 0) {
+      console.log("尝试渲染，次数:", attempt);
+      
+      try {
+        gitalkInstance.render('gitalk-container');
+        console.log("渲染成功");
+        
+        document.getElementById('gitalk-loading').style.display = 'none';
+        document.getElementById('gitalk-init').style.display = 'none';
+      } catch (renderError) {
+        console.error('渲染错误:', renderError);
+        
+        // 显示用户友好的错误信息
+        const errorDiv = document.getElementById('gitalk-loading');
+        errorDiv.innerHTML = `
+          <p>评论系统初始化失败</p>
+          <p>错误原因: ${renderError.message}</p>
+          <button onclick="initGitalk()">重试</button>
+        `;
+      }
+    }
+    
+    // ==== 关键修复：移除 loadGitalkSuc 引用 ====
+    // 加载 Gitalk 资源后的回调 - 替换原 loadGitalkSuc 函数
+    function initOnLoad() {
+      // 检查是否管理员（通过 URL 参数）
+      const isAdmin = location.search.includes('admin=true');
+      
+      // 初始化 Gitalk
+      initGitalk();
+      
+      // 如果是管理员，显示初始化按钮
+      if (isAdmin) {
+        document.getElementById('gitalk-init').style.display = 'block';
+      }
+    }
+  </script>
+  
+  <!-- 加载 Gitalk 资源 - 替换回调函数为 initOnLoad -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" onload="initOnLoad()"></script>
+  
+
+      </div>
     
   </div>
 
@@ -203,13 +277,21 @@
               
         </li>
         
+        <li>
+          
+            <a title="email" href="mailto:241220117@smail.nju.edu.cn">
+              <i class="iconfont icon-envelope"></i>
+            </a>
+            
+        </li>
+        
     </ul>
   </div>
   
     
     <div class="footer-more">
       
-        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2025 Oranges</a>
+        <a target="_blank" rel="noopener" href="https://github.com/starwinks">Copyright © 2025 starwinks</a>
         
     </div>
   
@@ -220,19 +302,6 @@
         
     </div>
   
-  
-    <div class="footer-views">
-      
-          本站总访问量<span id="busuanzi_value_site_pv"></span>次
-        
-      
-          本文总阅读量<span id="busuanzi_value_page_pv"></span>次
-        
-      
-          本站访客数<span id="busuanzi_value_site_uv"></span>人
-        
-      
-    </div>
   
 </div>
 
@@ -266,7 +335,7 @@
           </a>
         </span>
         
-          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
         
         <span class="search-close-icon" id="search-close-icon">
           <a href="javascript: void(0)">
@@ -318,7 +387,7 @@
       'use strict';
       var $input = document.getElementById(search_id);
       var $resultContent = document.getElementById(content_id);
-      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
       $.ajax({
         // 0x01. load xml file
         url: path,
@@ -414,7 +483,7 @@
             });
             str += "</ul>";
             if (str.indexOf('<li>') === -1) {
-              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
             }
             $resultContent.innerHTML = str;
           });
@@ -422,9 +491,9 @@
         error: function(xhr, status, error) {
           $resultContent.innerHTML = ""
           if (xhr.status === 404) {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
           } else {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
           }
         }
       });

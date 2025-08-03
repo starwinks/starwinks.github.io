@@ -207,87 +207,130 @@
   <div id="gitalk-container"></div>
   
   <!-- 加载状态指示器 -->
-  <div id="gitalk-loading" style="text-align:center;padding:20px;">
-    <p>正在加载评论系统...</p>
-  </div>
-  
-  <!-- 手动初始化按钮（仅管理员可见） -->
-  <div id="gitalk-init" style="display:none;text-align:center;margin-top:20px;">
-    <button onclick="initGitalk()" class="btn">管理员初始化评论</button>
+  <div id="gitalk-status" style="text-align:center;padding:20px;">
+    <p id="gitalk-loading">正在加载评论系统...</p>
+    <div id="gitalk-error" style="display:none;color:#f00;margin-top:15px;">
+      <p>评论系统加载失败，请尝试：</p>
+      <button onclick="retryGitalk()" class="btn">重新加载</button>
+    </div>
+    <div id="gitalk-admin" style="display:none;margin-top:20px;">
+      <p>管理员操作：</p>
+      <button onclick="initGitalk()" class="btn">初始化评论</button>
+    </div>
   </div>
 
   <script>
-    // 全局 Gitalk 实例
+    // 全局Gitalk实例
     let gitalkInstance = null;
     
-    // 初始化 Gitalk
-    function initGitalk() {
-      console.log("初始化函数被调用"); // 调试日志
-      
+    // 管理员检测
+    const isAdmin = () => {
+      return window.location.search.includes('admin=true');
+    };
+    
+    // 显示/隐藏元素
+    const showElement = (id) => {
+      document.getElementById(id).style.display = 'block';
+    };
+    const hideElement = (id) => {
+      document.getElementById(id).style.display = 'none';
+    };
+    
+    // 初始化Gitalk
+    const initGitalk = async () => {
       try {
-        // 创建 Gitalk 实例（简化版）
+        hideElement('gitalk-error');
+        showElement('gitalk-loading');
+        
+        // 使用更可靠的CORS代理
+        const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://github.com/login/oauth/access_token');
+        
         gitalkInstance = new Gitalk({
           clientID: 'Ov23li3x8SRSG3fRByes',
           repo: 'starwinks.github.io',
           owner: 'starwinks',
           admin: ['starwinks'],
           id: location.pathname,
-          proxy: 'https://corsproxy.io/?',
-          createIssueManually: true
+          distractionFreeMode: false,
+          proxy: proxyUrl,
+          createIssueManually: true,
+          // 添加必要的CORS头
+          headers: {
+            'Accept': 'application/vnd.github.v3+json',
+            'Access-Control-Allow-Origin': '*'
+          }
         });
         
         // 渲染评论框
         renderGitalk();
-      } catch (initError) {
-        console.error('初始化错误:', initError);
-        alert('初始化失败: ' + initError.message);
+      } catch (error) {
+        showError(`初始化失败: ${error.message}`);
       }
-    }
+    };
     
-    // 渲染函数（添加详细日志）
-    function renderGitalk(attempt = 0) {
-      console.log("尝试渲染，次数:", attempt);
-      
+    // 渲染函数
+    const renderGitalk = (attempt = 0) => {
       try {
         gitalkInstance.render('gitalk-container');
-        console.log("渲染成功");
-        
-        document.getElementById('gitalk-loading').style.display = 'none';
-        document.getElementById('gitalk-init').style.display = 'none';
-      } catch (renderError) {
-        console.error('渲染错误:', renderError);
-        
-        // 显示用户友好的错误信息
-        const errorDiv = document.getElementById('gitalk-loading');
-        errorDiv.innerHTML = `
-          <p>评论系统初始化失败</p>
-          <p>错误原因: ${renderError.message}</p>
-          <button onclick="initGitalk()">重试</button>
-        `;
+        hideElement('gitalk-status');
+        hideElement('gitalk-admin');
+      } catch (error) {
+        if (attempt < 2) {
+          // 首次失败后1秒重试
+          setTimeout(() => renderGitalk(attempt + 1), 1000);
+        } else {
+          showError(`渲染失败: ${error.message}`);
+          
+          // 如果是管理员，显示初始化按钮
+          if (isAdmin()) {
+            showElement('gitalk-admin');
+          }
+        }
       }
-    }
+    };
     
-    // ==== 关键修复：移除 loadGitalkSuc 引用 ====
-    // 加载 Gitalk 资源后的回调 - 替换原 loadGitalkSuc 函数
-    function initOnLoad() {
-      // 检查是否管理员（通过 URL 参数）
-      const isAdmin = location.search.includes('admin=true');
-      
-      // 初始化 Gitalk
+    // 错误处理
+    const showError = (message) => {
+      const errorDiv = document.getElementById('gitalk-error');
+      errorDiv.innerHTML = `<p>${message}</p>`;
+      errorDiv.style.display = 'block';
+      document.getElementById('gitalk-loading').style.display = 'none';
+    };
+    
+    // 重试函数
+    const retryGitalk = () => {
+      hideElement('gitalk-error');
+      showElement('gitalk-loading');
       initGitalk();
+    };
+    
+    // 主加载函数
+    const loadGitalk = () => {
+      // 使用CDN加载Gitalk资源
+      const loadGitalkJS = new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js';
+        script.onload = resolve;
+        document.body.appendChild(script);
+      });
       
-      // 如果是管理员，显示初始化按钮
-      if (isAdmin) {
-        document.getElementById('gitalk-init').style.display = 'block';
-      }
-    }
+      const loadGitalkCSS = new Promise((resolve) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css';
+        link.onload = resolve;
+        document.head.appendChild(link);
+      });
+      
+      // 资源加载完成后初始化
+      Promise.all([loadGitalkJS, loadGitalkCSS])
+        .then(() => initGitalk())
+        .catch(err => showError(`资源加载失败: ${err.message}`));
+    };
+    
+    // 页面加载后启动
+    document.addEventListener('DOMContentLoaded', loadGitalk);
   </script>
-  
-  <!-- 加载 Gitalk 资源 - 替换回调函数为 initOnLoad -->
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" onload="initOnLoad()"></script>
-  
 
       </div>
     

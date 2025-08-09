@@ -9,13 +9,16 @@
   
   <!-- 用于搜索引擎的文章摘要 -->
   
+  <!-- 文章页 -->
+  <meta name="description" content="仅限超级用户设置密码，访问受限内容" />
+  
   
   
   <title>
     
-      Category 
+      超级用户入口 
       
-       : hello
+      
       |
     
      starwinks
@@ -108,30 +111,104 @@
 
 
       <div class="flex-container">
-        <!-- 标签详情页，展示某个标签下的文章列表，url形式：https://yoursite/tags/某个标签/ -->
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
-<div class="container category-details">
-  <div class="content-title">
-    <h2>
-      <span>hello</span>
-    </h2>
-  </div>
+
+
+
+  <!-- clipboard -->
+
   
-    <div class="post-list">
-      <div class="post-item" title="Hello World">
-        <span class="time-m-d">2025-08-09</span>
-        <a href="/2025/08/09/hello-world/">
-          <span>Hello World</span>
-        </a>
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">超级用户入口</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-08-09 20:49:17
+        </span>
+        
       </div>
-    </div>
-  
-  <nav class="post-navigation">
-    
-    <span class="page-num">1 / 1</span>
-    
-  </nav>
+      <div class="markdown-body">
+        <div style="max-width:340px;margin:48px auto 0 auto;padding:32px 24px;border-radius:12px;background:#fafbfc;box-shadow:0 2px 12px #eee;text-align:center;">
+  <h2 style="font-size:22px;color:#555;font-weight:500;margin-bottom:18px;">超级用户密码设置</h2>
+  <input type="password" id="superuser-input" placeholder="输入超级用户密码" style="padding:8px 12px;border-radius:6px;border:1px solid #ccc;font-size:16px;width:180px;">
+  <button onclick="
+    var pwd = document.getElementById('superuser-input').value;
+    var expire = Date.now() + 24*60*60*1000;
+    localStorage.setItem('superuser_pwd', pwd);
+    localStorage.setItem('superuser_expire', expire);
+    alert('密码已保存，有效期24小时');
+  " style="padding:8px 24px;border-radius:6px;border:none;background:#808080;color:#fff;font-size:16px;cursor:pointer;margin-left:12px;">提交</button>
+  <button onclick="
+    localStorage.removeItem('superuser_pwd');
+    localStorage.removeItem('superuser_expire');
+    alert('已退出超级用户模式');
+  " style="padding:8px 24px;border-radius:6px;border:none;background:#e57373;color:#fff;font-size:16px;cursor:pointer;margin-left:12px;">退出</button>
+  <div style="margin-top:18px;color:#888;font-size:14px;">此页面仅限超级用户访问，密码有效期为24小时，到期需重新设置</div>
 </div>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2025-08-09 20:49:17
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">超级用户密码设置</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
 
         
 <div class="footer">

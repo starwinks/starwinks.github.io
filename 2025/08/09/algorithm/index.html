@@ -109,6 +109,9 @@
 
       <div class="flex-container">
         <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<script>
+  window.superuser_password = 'moon.starwinks08';
+</script>
 <!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
 
@@ -142,12 +145,57 @@
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2025-08-09 20:57:36
+          2025-08-09 22:44:20
         </span>
         
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/algo/" title="algo">
+                    #algo
+                  </a>
+                </span>
+                
+              </span>
+          
       </div>
       <div class="markdown-body">
-        <h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1>
+  
+  <div id="superuser-content" style="display:none;">
+    <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="779fde0453e912aaacd46c639d1fcc97401d4ae8c09a96b39d2098c78e99bcf3">9e6f3a117cdce6399da0073df16cc5f89328a70c9e077da7d403bfc1571369a8bc3879324444988b718a116dffc5094873279cd062640ed3727a45f695f75b846b0a5c9975dcd77a9829f926dfdfc7f6c916e53ac438d0668baa0ed6ce04ea5a267ed779925448a7a169a85b5f9e6d726273b13b2f225d41070c8471469298c2</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+  </div>
+  <div id="superuser-tip" style="text-align:center;color:#888;font-size:16px;margin:48px 0;">
+    <b>施工中~~</b><br>
+  </div>
+  <script>
+    (function(){
+      var pwd = localStorage.getItem('superuser_pwd');
+      var expire = localStorage.getItem('superuser_expire');
+      var configPwd = 'moon.starwinks08';
+      var now = Date.now();
+      if (pwd && pwd === configPwd && expire && now < expire) {
+        document.getElementById('superuser-content').style.display = 'block';
+        document.getElementById('superuser-tip').style.display = 'none';
+      } else if (expire && now >= expire) {
+        localStorage.removeItem('superuser_pwd');
+        localStorage.removeItem('superuser_expire');
+      }
+    })();
+  </script>
+
+
       </div>
       
         <div class="prev-or-next">
@@ -157,13 +205,6 @@
                 <i class="iconfont icon-chevronleft"></i>
                 <span>Prev</span>
               </a>
-            
-          </div>
-          <div class="post-attach">
-            <span class="post-pubtime">
-              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2025-08-09 20:57:36
-            </span>
             
           </div>
           <div class="post-foot-prev">

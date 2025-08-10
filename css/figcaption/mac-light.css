@@ -1,0 +1,105 @@
+/* 强制代码区主背景色和字体色为 solarized-light */
+.markdown-body .highlight,
+.markdown-body pre,
+.markdown-body code {
+  background: #fdf6e3 !important;
+  color: #657b83 !important;
+}
+/* Mac-light 代码块风格（Solarized Light） */
+
+.markdown-body .highlight .gutter pre {
+  background-color: #fdf6e3 !important;
+}
+
+
+figure {
+  padding: 32px 2px 2px;
+  background: #fdf6e3 !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #b3c2c233;
+  position: relative;
+}
+
+figure::after {
+  content: "";
+  position: absolute;
+  height: 12px;
+  width: 12px;
+  box-shadow: 10px 11px #ff5e5c, 30px 11px #ffbb4e, 50px 11px #00c857;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+}
+
+
+figure table {
+  margin-bottom: 0 !important;
+  background: #fdf6e3 !important;
+}
+
+figure table .gutter {
+  user-select: none;
+}
+
+figure figcaption {
+  padding-left: 1rem;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: none;
+}
+
+figure table {
+  border-top: 1px solid #eee;
+}
+
+/* Solarized Light 代码配色 */
+
+.markdown-body .highlight .line {
+  background: #fdf6e3 !important;
+  color: #657b83 !important;
+}
+
+
+.markdown-body .highlight .line .keyword {
+  color: #859900 !important;
+}
+
+
+.markdown-body .highlight .line .string {
+  color: #2aa198 !important;
+}
+
+
+.markdown-body .highlight .line .number {
+  color: #d33682 !important;
+}
+
+
+.markdown-body .highlight .line .comment {
+  color: #93a1a1 !important;
+  font-style: italic;
+}
+
+
+.markdown-body .highlight .line .function {
+  color: #268bd2 !important;
+}
+
+
+.markdown-body .highlight .line .type {
+  color: #b58900 !important;
+}
+
+
+.markdown-body .highlight .line .variable {
+  color: #cb4b16 !important;
+}
+
+
+.markdown-body .highlight .line .constant {
+  color: #6c71c4 !important;
+}

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="starwinks" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <!-- 文章页 -->
+  <meta name="description" content="记录一些算法竞赛中的基础板子" />
+  
+  
+  
+  <title>
+    
+      algo基础板子 
+      
+      
+      |
+    
+     starwinks
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <!-- 官方 Solarized Light 高亮主题 -->
+  <link rel="stylesheet" href="/css/solarized-light.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-light.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">starwinks</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<script>
+  window.superuser_password = 'moon.starwinks08';
+</script>
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">algo基础板子</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-08-10 16:35:24
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/algo/" title="algo">
+                    #algo
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+  
+  <h1 id="基础板子"><a href="#基础板子" class="headerlink" title="基础板子"></a>基础板子</h1><h2 id="1-qucik-pow"><a href="#1-qucik-pow" class="headerlink" title="1. qucik pow"></a>1. qucik pow</h2><p>实质：$b$ 用二进制表示</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">quickPow</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> p)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)&#123;</span><br><span class="line">        <span class="keyword">if</span>(b&amp;<span class="number">1</span>)ans=(<span class="type">long</span> <span class="type">long</span>)ans*a%p;<span class="comment">//一定要开longlong,否则会溢出</span></span><br><span class="line">        <span class="comment">//事实上要开两倍的长度</span></span><br><span class="line">        a=(<span class="type">long</span> <span class="type">long</span>)a*a%p;</span><br><span class="line">        b&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-高精度-basic"><a href="#2-高精度-basic" class="headerlink" title="2. 高精度(basic)"></a>2. 高精度(basic)</h2><div class="admonition note">
+  <strong>注意：</strong> 以下均默认 $a \geq 0, b \geq 0$，负数的情况需要另外判断
+</div>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">add</span><span class="params">(string&amp; a, string&amp; b)</span></span>&#123;</span><br><span class="line">    <span class="type">bool</span> areSwap=<span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(a.<span class="built_in">size</span>()&lt;b.<span class="built_in">size</span>())&#123;</span><br><span class="line">        areSwap=<span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">swap</span>(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> i=a.<span class="built_in">size</span>()<span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> j=b.<span class="built_in">size</span>()<span class="number">-1</span>;</span><br><span class="line">    <span class="type">int</span> carry=<span class="number">0</span>;</span><br><span class="line">    string ans;</span><br><span class="line">    ans.<span class="built_in">reserve</span>(a.<span class="built_in">size</span>()<span class="number">+1</span>);<span class="comment">//预留较大的空间</span></span><br><span class="line">    <span class="type">int</span> na,nb=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&gt;=<span class="number">0</span>||j&gt;=<span class="number">0</span>||carry)&#123;<span class="comment">//注意进位，实际上j&gt;=0可以省略不写</span></span><br><span class="line">        na=<span class="number">0</span>,nb=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(i&gt;=<span class="number">0</span>)na=a[i--]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=<span class="number">0</span>)nb=b[j--]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="type">int</span> sum=na+nb+carry;</span><br><span class="line">        ans.<span class="built_in">push_back</span>(sum%<span class="number">10</span>+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">        carry=sum/<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">reverse</span>(ans.<span class="built_in">begin</span>(),ans.<span class="built_in">end</span>());</span><br><span class="line">    <span class="keyword">if</span>(areSwap)<span class="built_in">swap</span>(a,b);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">string <span class="title">sub</span><span class="params">(string&amp; a, string&amp; b)</span></span>&#123;</span><br><span class="line">    <span class="type">bool</span> areSwap=<span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(a.<span class="built_in">size</span>()&lt;b.<span class="built_in">size</span>())areSwap=<span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(a.<span class="built_in">size</span>()==b.<span class="built_in">size</span>()&amp;&amp;a&lt;b)areSwap=<span class="literal">true</span>;<span class="comment">//note:&quot;9&quot;&gt;&quot;89&quot;!</span></span><br><span class="line">    <span class="keyword">if</span>(areSwap)<span class="built_in">swap</span>(a,b);</span><br><span class="line">    <span class="type">int</span> i=a.<span class="built_in">size</span>()<span class="number">-1</span>,j=b.<span class="built_in">size</span>()<span class="number">-1</span>,borrow=<span class="number">0</span>;</span><br><span class="line">    string ans;</span><br><span class="line">    ans.<span class="built_in">reserve</span>(a.<span class="built_in">size</span>());</span><br><span class="line">    <span class="type">int</span> na=<span class="number">0</span>,nb=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">        na=a[i--]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        nb=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=<span class="number">0</span>)nb=b[j--]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="type">int</span> diff=na-nb-borrow;</span><br><span class="line">        <span class="keyword">if</span>(diff&lt;<span class="number">0</span>)&#123;</span><br><span class="line">            diff+=<span class="number">10</span>;</span><br><span class="line">            borrow=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> borrow=<span class="number">0</span>;<span class="comment">//注意这个</span></span><br><span class="line">        ans.<span class="built_in">push_back</span>(diff+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> n=ans.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span>(n&gt;<span class="number">1</span>&amp;&amp;ans[n<span class="number">-1</span>]==<span class="string">&#x27;0&#x27;</span>)n--;<span class="comment">//去除&quot;后导&quot;0，注意不要删完</span></span><br><span class="line">    ans.<span class="built_in">resize</span>(n);<span class="comment">//注意resize保留的是前面的</span></span><br><span class="line">    <span class="keyword">if</span>(areSwap)ans.<span class="built_in">push_back</span>(<span class="string">&#x27;-&#x27;</span>);<span class="comment">//注意加上负号</span></span><br><span class="line">    <span class="built_in">reverse</span>(ans.<span class="built_in">begin</span>(),ans.<span class="built_in">end</span>());</span><br><span class="line">    <span class="keyword">if</span>(areSwap)<span class="built_in">swap</span>(a,b);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">string <span class="title">mul</span><span class="params">(string&amp; a, string&amp; b)</span></span>&#123;</span><br><span class="line">    string ans;</span><br><span class="line">    ans.<span class="built_in">resize</span>(a.<span class="built_in">size</span>()+b.<span class="built_in">size</span>(),<span class="number">0</span>);<span class="comment">//预留足够空间</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;a.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;b.<span class="built_in">size</span>();j++)&#123;</span><br><span class="line">            <span class="type">int</span> product=(a[a.<span class="built_in">size</span>()<span class="number">-1</span>-i]-<span class="string">&#x27;0&#x27;</span>)*(b[b.<span class="built_in">size</span>()<span class="number">-1</span>-j]-<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">            ans[i+j]+=product;</span><br><span class="line">            ans[i+j<span class="number">+1</span>]+=ans[i+j]/<span class="number">10</span>;</span><br><span class="line">            ans[i+j]%=<span class="number">10</span>;<span class="comment">//注意这一部分的逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;ans.<span class="built_in">size</span>();i++)ans[i]+=<span class="string">&#x27;0&#x27;</span>;<span class="comment">//到这里再转为字符，方便前面处理</span></span><br><span class="line">    <span class="type">int</span> n=ans.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">while</span>(n&gt;<span class="number">1</span>&amp;&amp;ans[n<span class="number">-1</span>]==<span class="string">&#x27;0&#x27;</span>)n--;</span><br><span class="line">    ans.<span class="built_in">resize</span>(n);</span><br><span class="line">    <span class="built_in">reverse</span>(ans.<span class="built_in">begin</span>(),ans.<span class="built_in">end</span>());</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">pair&lt;string,string&gt; <span class="title">divmod</span><span class="params">(string&amp; a, string&amp; b)</span></span>&#123;</span><br><span class="line">    <span class="built_in">assert</span>(b!=<span class="string">&quot;0&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(a==<span class="string">&quot;0&quot;</span>)<span class="keyword">return</span> &#123;<span class="string">&quot;0&quot;</span>,<span class="string">&quot;0&quot;</span>&#125;;<span class="comment">//这里要特判</span></span><br><span class="line">    <span class="keyword">if</span>(a.<span class="built_in">size</span>()&lt;b.<span class="built_in">size</span>()||(a.<span class="built_in">size</span>()==b.<span class="built_in">size</span>()&amp;&amp;a&lt;b))<span class="keyword">return</span> &#123;<span class="string">&quot;0&quot;</span>,a&#125;;<span class="comment">//这里也要特判！！！</span></span><br><span class="line">    string quotient,remainder;</span><br><span class="line">    quotient.<span class="built_in">reserve</span>(a.<span class="built_in">size</span>()-b.<span class="built_in">size</span>()<span class="number">+1</span>);<span class="comment">//空间不能小</span></span><br><span class="line">    remainder=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">char</span> digit: a)&#123;</span><br><span class="line">        remainder+=digit;</span><br><span class="line">        <span class="type">int</span> ind=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(ind&lt;remainder.<span class="built_in">size</span>()&amp;&amp;remainder[ind]==<span class="string">&#x27;0&#x27;</span>)ind++;</span><br><span class="line">        remainder=remainder.<span class="built_in">substr</span>(ind,remainder.<span class="built_in">size</span>()-ind);<span class="comment">//去除前导0, 注意不用留一个0</span></span><br><span class="line">        <span class="type">int</span> cnt=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(remainder.<span class="built_in">size</span>()&gt;b.<span class="built_in">size</span>()||(remainder.<span class="built_in">size</span>()==b.<span class="built_in">size</span>()&amp;&amp;remainder&gt;=b))&#123;</span><br><span class="line">            <span class="type">int</span> i=remainder.<span class="built_in">size</span>()<span class="number">-1</span>,j=b.<span class="built_in">size</span>()<span class="number">-1</span>,borrow=<span class="number">0</span>;</span><br><span class="line">            string tmp;</span><br><span class="line">            tmp.<span class="built_in">reserve</span>(remainder.<span class="built_in">size</span>());</span><br><span class="line">            <span class="keyword">while</span>(i&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="type">int</span> x=remainder[i--]-<span class="string">&#x27;0&#x27;</span>,y=<span class="number">0</span>;</span><br><span class="line">                <span class="keyword">if</span>(j&gt;=<span class="number">0</span>)y=b[j--]-<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                <span class="type">int</span> diff=x-y-borrow;</span><br><span class="line">                <span class="keyword">if</span>(diff&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                    diff+=<span class="number">10</span>;</span><br><span class="line">                    borrow=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> borrow=<span class="number">0</span>;</span><br><span class="line">                tmp.<span class="built_in">push_back</span>(diff+<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">int</span> n=tmp.<span class="built_in">size</span>();</span><br><span class="line">            <span class="keyword">while</span>(n&gt;<span class="number">1</span>&amp;&amp;tmp[n<span class="number">-1</span>]==<span class="string">&#x27;0&#x27;</span>)n--;</span><br><span class="line">            tmp.<span class="built_in">resize</span>(n);</span><br><span class="line">            <span class="built_in">reverse</span>(tmp.<span class="built_in">begin</span>(),tmp.<span class="built_in">end</span>());</span><br><span class="line">            remainder=tmp;</span><br><span class="line">            cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(cnt!=<span class="number">0</span>||!quotient.<span class="built_in">empty</span>())quotient.<span class="built_in">push_back</span>(cnt+<span class="string">&#x27;0&#x27;</span>);<span class="comment">//预处理前导零</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(remainder.<span class="built_in">empty</span>())remainder=<span class="string">&quot;0&quot;</span>;<span class="comment">//注意这一句</span></span><br><span class="line">    <span class="keyword">return</span> &#123;quotient,remainder&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2025/08/09/hello-world/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%9D%BF%E5%AD%90"><span class="toc-text">基础板子</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-qucik-pow"><span class="toc-text">1. qucik pow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%AB%98%E7%B2%BE%E5%BA%A6-basic"><span class="toc-text">2. 高精度(basic)</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/starwinks">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+        <li>
+          
+            <a title="email" href="mailto:starwinks@foxmail.com">
+              <i class="iconfont icon-envelope"></i>
+            </a>
+            
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/starwinks">Copyright © 2025 starwinks</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+  <!-- 超级用户密码输入框 -->
+  <div id="superuser-password" style="text-align:center;margin:8px 0;">
+  <!-- 超级用户入口已隐藏，无任何可见元素 -->
+  </div>
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+
+      </div>
+    </div>
+  </body>
+</html>

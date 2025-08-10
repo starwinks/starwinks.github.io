@@ -1,0 +1,53 @@
+/* Solarized Light theme for Highlight.js */
+/* 官方主题，直接引入即可 */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fdf6e3;
+  color: #657b83;
+}
+.hljs-comment,
+.hljs-quote {
+  color: #93a1a1;
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #859900;
+}
+.hljs-number,
+.hljs-string,
+.hljs-meta .hljs-string,
+.hljs-literal,
+.hljs-doctag,
+.hljs-regexp {
+  color: #2aa198;
+}
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #268bd2;
+}
+.hljs-subst {
+  color: #657b83;
+}
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #b58900;
+}
+.hljs-tag,
+.hljs-name,
+.hljs-selector-class {
+  color: #cb4b16;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
+}
+.hljs-link {
+  color: #6c71c4;
+}

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/19.7.0/build.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="starwinks" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <!-- 文章页 -->
+  <meta name="description" content="使用css和HTML实现各种提醒框，包括折叠功能和 inline 浮动" />
+  
+  
+  
+  <title>
+    
+      HTML+css复现admonition 
+      
+      
+      |
+    
+     starwinks
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <!-- 官方 Solarized Light 高亮主题 -->
+  <link rel="stylesheet" href="/css/solarized-light.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-light.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">starwinks</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<script>
+  window.superuser_password = 'moon.starwinks08';
+</script>
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">HTML+css复现admonition</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-08-10 17:56:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/practical-technology/" title="practical technology">
+                    #practical technology
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+  
+  <h1 id="background"><a href="#background" class="headerlink" title="background"></a>background</h1><p>在<code>algo基础板子</code>一文中，我在一个地方使用了下面的语法</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">!!! note</span><br><span class="line"><span class="code">    注意：</span></span><br></pre></td></tr></table></figure>
+<p>却发现博客上渲染失败了. 查找了一番资料后发现是hexo主题不支持admonition。<del>令我大为沮丧。</del><br>然而，<a target="_blank" rel="noopener" href="https://squidfunk.github.io/mkdocs-material/reference/admonitions/">查阅了mkdocs的官方文档</a>之后我发现原来admonition可以用纯HTML+CSS实现，赶紧<del>让chatgpt5</del>给我写了一个css文件来模拟admonition.效果还算不错</p>
+<h1 id="css文件"><a href="#css文件" class="headerlink" title="css文件"></a>css文件</h1><details class="admonition note" open>
+  <summary>Note</summary>
+  <p>
+  首先在<head>标签内插入Octicons CDN：
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/octicons/19.7.0/build.css&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</p>
+</details>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 通用基础样式 */</span></span><br><span class="line"><span class="selector-class">.admonition</span> &#123;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">4px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">1.2em</span> <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">border-left</span>: .<span class="number">4rem</span> solid;</span><br><span class="line">  <span class="attribute">background</span>: <span class="number">#f8f9fa</span>;</span><br><span class="line">  <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">1px</span> <span class="number">3px</span> <span class="built_in">rgba</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0.08</span>);</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">color</span>: inherit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 折叠版（&lt;details&gt;支持） */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-attr">[open]</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">90deg</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.admonition</span> <span class="selector-tag">summary</span> &#123;</span><br><span class="line">  <span class="attribute">list-style</span>: none;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">align-items</span>: center;</span><br><span class="line">  <span class="attribute">padding</span>: .<span class="number">6em</span> <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: <span class="number">600</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">border-bottom</span>: <span class="number">1px</span> solid <span class="built_in">rgba</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0.05</span>);</span><br><span class="line">  <span class="attribute">color</span>: inherit;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.admonition</span> <span class="selector-tag">summary</span>::-webkit-details-marker &#123; <span class="attribute">display</span>: none; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">width</span>: .<span class="number">6em</span>;</span><br><span class="line">  <span class="attribute">height</span>: .<span class="number">6em</span>;</span><br><span class="line">  <span class="attribute">border</span>: solid currentColor;</span><br><span class="line">  <span class="attribute">border-width</span>: <span class="number">0</span> .<span class="number">15em</span> .<span class="number">15em</span> <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">padding</span>: .<span class="number">2em</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">rotate</span>(<span class="number">0deg</span>);</span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">0.2s</span> ease;</span><br><span class="line">  <span class="attribute">margin-left</span>: auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 标题图标 */</span></span><br><span class="line"><span class="selector-class">.admonition</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>,</span><br><span class="line"><span class="selector-class">.admonition</span> &gt; <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">margin-right</span>: .<span class="number">5em</span>;</span><br><span class="line">  <span class="attribute">mask-repeat</span>: no-repeat;</span><br><span class="line">  <span class="attribute">mask-size</span>: contain;</span><br><span class="line">  <span class="attribute">background-color</span>: currentColor;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 正文 */</span></span><br><span class="line"><span class="selector-class">.admonition</span> <span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">padding</span>: .<span class="number">6em</span> <span class="number">1em</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Inline 浮动版本 */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.inline</span> &#123;</span><br><span class="line">  <span class="attribute">float</span>: left;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">1em</span> <span class="number">1em</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.inline</span><span class="selector-class">.end</span> &#123;</span><br><span class="line">  <span class="attribute">float</span>: right;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">1em</span> <span class="number">1em</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">max-width</span>: <span class="number">768px</span>) &#123;</span><br><span class="line">  <span class="selector-class">.admonition</span><span class="selector-class">.inline</span>, <span class="selector-class">.admonition</span><span class="selector-class">.inline</span><span class="selector-class">.end</span> &#123;</span><br><span class="line">    <span class="attribute">float</span>: none;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">1em</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 类型定义（颜色 + 图标） */</span></span><br><span class="line"><span class="comment">/* Note */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.note</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#448aff</span>; <span class="attribute">color</span>: <span class="number">#2962ff</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.note</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.note</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#e7f0fd</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.note</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.note</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;path d=&quot;M1 3v10c0 .55.45 1 1 1h6v-2H3V4h10v3h2V3c0-.55-.45-1-1-1H2c-.55 0-1 .45-1 1zM11 10h1.5l-3.5 3.5L6.5 10H8V7h3v3z&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Abstract */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.abstract</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#00bfa5</span>; <span class="attribute">color</span>: <span class="number">#00796b</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.abstract</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.abstract</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#e0f2f1</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.abstract</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.abstract</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;rect width=&quot;16&quot; height=&quot;16&quot; rx=&quot;2&quot; ry=&quot;2&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Info */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.info</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#0288d1</span>; <span class="attribute">color</span>: <span class="number">#01579b</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.info</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.info</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#e1f5fe</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.info</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.info</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;7&quot;/&gt;&lt;line x1=&quot;8&quot; y1=&quot;4&quot; x2=&quot;8&quot; y2=&quot;9&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;circle cx=&quot;8&quot; cy=&quot;12&quot; r=&quot;1&quot; fill=&quot;currentColor&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Tip */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.tip</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#43a047</span>; <span class="attribute">color</span>: <span class="number">#2e7d32</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.tip</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.tip</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#e8f5e9</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.tip</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.tip</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 19l7-12H5l7 12z&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Success */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.success</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#2e7d32</span>; <span class="attribute">color</span>: <span class="number">#1b5e20</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.success</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.success</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#e8f5e9</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.success</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.success</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6L9 17l-5-5&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Question */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.question</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#6a1b9a</span>; <span class="attribute">color</span>: <span class="number">#4a148c</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.question</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.question</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#f3e5f5</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.question</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.question</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;M12 16v.01&quot;/&gt;&lt;path d=&quot;M12 12a2 2 0 1 0-2-2&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Warning */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.warning</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#f57c00</span>; <span class="attribute">color</span>: <span class="number">#e65100</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.warning</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.warning</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#fff3e0</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.warning</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.warning</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z&quot;/&gt;&lt;line x1=&quot;12&quot; y1=&quot;9&quot; x2=&quot;12&quot; y2=&quot;13&quot;/&gt;&lt;line x1=&quot;12&quot; y1=&quot;17&quot; x2=&quot;12&quot; y2=&quot;17&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Failure */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.failure</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#d50000</span>; <span class="attribute">color</span>: <span class="number">#b71c1c</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.failure</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.failure</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#ffebee</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.failure</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.failure</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;line x1=&quot;15&quot; y1=&quot;9&quot; x2=&quot;9&quot; y2=&quot;15&quot;/&gt;&lt;line x1=&quot;9&quot; y1=&quot;9&quot; x2=&quot;15&quot; y2=&quot;15&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Danger */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.danger</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#ff1744</span>; <span class="attribute">color</span>: <span class="number">#d32f2f</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.danger</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.danger</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#ffebee</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.danger</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.danger</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 2l1.5 6h6l-5 3.7 2 6-5-3.7-5 3.7 2-6-5-3.7h6z&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Bug */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.bug</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#c51162</span>; <span class="attribute">color</span>: <span class="number">#ad1457</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.bug</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.bug</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#fce4ec</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.bug</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.bug</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;path d=&quot;M5 2h6l.5 2H5.5L5 2zm3 12v-2h-2v2h2zM7 4v2H5.5L7 4z&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Example */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.example</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#7c4dff</span>; <span class="attribute">color</span>: <span class="number">#512da8</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.example</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.example</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#ede7f6</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.example</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.example</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;circle cx=&quot;8&quot; cy=&quot;8&quot; r=&quot;7&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Quote */</span></span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.quote</span> &#123; <span class="attribute">border-left-color</span>: <span class="number">#455a64</span>; <span class="attribute">color</span>: <span class="number">#263238</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.quote</span> <span class="selector-tag">summary</span>, <span class="selector-class">.admonition</span><span class="selector-class">.quote</span> <span class="selector-class">.admonition-title</span> &#123; <span class="attribute">background</span>: <span class="number">#eceff1</span>; &#125;</span><br><span class="line"><span class="selector-class">.admonition</span><span class="selector-class">.quote</span> <span class="selector-tag">summary</span><span class="selector-pseudo">::before</span>, <span class="selector-class">.admonition</span><span class="selector-class">.quote</span> <span class="selector-class">.admonition-title</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">mask-image</span>: <span class="built_in">url</span>(<span class="string">&#x27;data:image/svg+xml;utf8,&lt;svg fill=&quot;currentColor&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 16 16&quot;&gt;&lt;path d=&quot;M6 12h2v-6H6v6zm4 0h2v-6h-2v6z&quot;/&gt;&lt;/svg&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="html代码及效果"><a href="#html代码及效果" class="headerlink" title="html代码及效果"></a>html代码及效果</h1><blockquote>
+<p>实现提醒框、折叠功能和 inline 浮动</p>
+</blockquote>
+<h2 id="1-折叠（使用-）"><a href="#1-折叠（使用-）" class="headerlink" title="1. 折叠（使用 &lt;details&gt;）"></a>1. 折叠（使用 <code>&lt;details&gt;</code>）</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">class</span>=<span class="string">&quot;admonition note&quot;</span> <span class="attr">open</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">summary</span>&gt;</span>Note 折叠示例<span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是Note类型的提示框，可点击展开和收起，带箭头。(open默认展开)<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">class</span>=<span class="string">&quot;admonition tip&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">summary</span>&gt;</span>Tip 折叠示例<span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是Tip类型的提示框，点击可展开和收起(默认折叠)<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">class</span>=<span class="string">&quot;admonition warning&quot;</span> <span class="attr">open</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">summary</span>&gt;</span>Warning 折叠示例<span class="tag">&lt;/<span class="name">summary</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是警告类型的折叠提示框。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">details</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<details class="admonition note" open>
+  <summary>Note 折叠示例</summary>
+  <p>这是Note类型的提示框，可点击展开和收起，带箭头。(open默认展开)</p>
+</details>
+
+<details class="admonition tip">
+  <summary>Tip 折叠示例</summary>
+  <p>这是Tip类型的提示框，点击可展开和收起(默认折叠)</p>
+</details>
+
+<details class="admonition warning" open>
+  <summary>Warning 折叠示例</summary>
+  <p>这是警告类型的折叠提示框。</p>
+</details>
+
+<hr>
+<h2 id="2-普通块级"><a href="#2-普通块级" class="headerlink" title="2. 普通块级"></a>2. 普通块级</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition info&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Info 提示<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是 Info 类型的普通提示框，没有折叠功能。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition success&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Success 提示<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是 Success 类型的普通提示框，常用于表示成功信息。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<div class="admonition info">
+  <div class="admonition-title">Info 提示</div>
+  <p>这是 Info 类型的普通提示框，没有折叠功能。</p>
+</div>
+
+<div class="admonition success">
+  <div class="admonition-title">Success 提示</div>
+  <p>这是 Success 类型的普通提示框，常用于表示成功信息。</p>
+</div>
+
+<hr>
+<h2 id="3-Inline-浮动示例"><a href="#3-Inline-浮动示例" class="headerlink" title="3. Inline 浮动示例"></a>3. Inline 浮动示例</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  这是正文段落，左侧有一个</span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition note inline&quot;</span>&gt;</span>Note 内联提示<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  ，用来做侧边栏提示。</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  这里有一个右浮动的</span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition warning inline end&quot;</span>&gt;</span>Warning 内联右浮动提示<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  ，你可以把它放到右侧。</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>
+  这是正文段落，左侧有一个
+  <div class="admonition note inline">Note 内联提示</div>
+  ，用来做侧边栏提示。
+</p>
+
+<p>
+  这里有一个右浮动的
+  <div class="admonition warning inline end">Warning 内联右浮动提示</div>
+  ，你可以把它放到右侧。
+</p>
+
+<hr>
+<h2 id="4-全部类型示例"><a href="#4-全部类型示例" class="headerlink" title="4. 全部类型示例"></a>4. 全部类型示例</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition note&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Note<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>基础提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition abstract&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Abstract<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>抽象提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition info&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Info<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>信息提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition tip&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Tip<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>技巧提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition success&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Success<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>成功提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition question&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Question<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>问题提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition warning&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Warning<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>警告提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition failure&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Failure<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>失败提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition danger&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Danger<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>危险提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition bug&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Bug<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>缺陷提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition example&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Example<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>示例提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition quote&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;admonition-title&quot;</span>&gt;</span>Quote<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>引用提示<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<div class="admonition note"><div class="admonition-title">Note</div><p>基础提示</p></div>
+<div class="admonition abstract"><div class="admonition-title">Abstract</div><p>抽象提示</p></div>
+<div class="admonition info"><div class="admonition-title">Info</div><p>信息提示</p></div>
+<div class="admonition tip"><div class="admonition-title">Tip</div><p>技巧提示</p></div>
+<div class="admonition success"><div class="admonition-title">Success</div><p>成功提示</p></div>
+<div class="admonition question"><div class="admonition-title">Question</div><p>问题提示</p></div>
+<div class="admonition warning"><div class="admonition-title">Warning</div><p>警告提示</p></div>
+<div class="admonition failure"><div class="admonition-title">Failure</div><p>失败提示</p></div>
+<div class="admonition danger"><div class="admonition-title">Danger</div><p>危险提示</p></div>
+<div class="admonition bug"><div class="admonition-title">Bug</div><p>缺陷提示</p></div>
+<div class="admonition example"><div class="admonition-title">Example</div><p>示例提示</p></div>
+<div class="admonition quote"><div class="admonition-title">Quote</div><p>引用提示</p></div>
+
+<hr>
+
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2025/08/10/algo%E5%9F%BA%E7%A1%80%E6%9D%BF%E5%AD%90/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#background"><span class="toc-text">background</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css%E6%96%87%E4%BB%B6"><span class="toc-text">css文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#html%E4%BB%A3%E7%A0%81%E5%8F%8A%E6%95%88%E6%9E%9C"><span class="toc-text">html代码及效果</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%8A%98%E5%8F%A0%EF%BC%88%E4%BD%BF%E7%94%A8-%EF%BC%89"><span class="toc-text">1. 折叠（使用 &lt;details&gt;）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%99%AE%E9%80%9A%E5%9D%97%E7%BA%A7"><span class="toc-text">2. 普通块级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Inline-%E6%B5%AE%E5%8A%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">3. Inline 浮动示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%85%A8%E9%83%A8%E7%B1%BB%E5%9E%8B%E7%A4%BA%E4%BE%8B"><span class="toc-text">4. 全部类型示例</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/starwinks">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+        <li>
+          
+            <a title="email" href="mailto:starwinks@foxmail.com">
+              <i class="iconfont icon-envelope"></i>
+            </a>
+            
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/starwinks">Copyright © 2025 starwinks</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+  <!-- 超级用户密码输入框 -->
+  <div id="superuser-password" style="text-align:center;margin:8px 0;">
+  <!-- 超级用户入口已隐藏，无任何可见元素 -->
+  </div>
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+
+      </div>
+    </div>
+  </body>
+</html>

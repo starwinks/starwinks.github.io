@@ -1,16 +1,166 @@
-/* Admonition 样式支持 */
-.admonition.note {
-  background: #f5f7fa;
-  border-left: 4px solid #42b983;
-  padding: 10px 16px;
-  margin: 12px 0;
-  color: #333;
+/* 通用基础样式 */
+.admonition {
+  border-radius: 4px;
+  margin: 1.2em 0;
+  border-left: .4rem solid;
+  background: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  overflow: hidden;
   font-size: 1em;
+  color: inherit;
 }
-* {
+
+/* 折叠版（<details>支持） */
+.admonition[open] summary::after {
+  transform: rotate(90deg);
+}
+.admonition summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: .6em 1em;
+  font-weight: 600;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  color: inherit;
+}
+.admonition summary::-webkit-details-marker { display: none; }
+.admonition summary::after {
+  content: '';
+  width: .6em;
+  height: .6em;
+  border: solid currentColor;
+  border-width: 0 .15em .15em 0;
+  padding: .2em;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+  margin-left: auto;
+}
+
+/* 标题图标 */
+.admonition summary::before,
+.admonition > .admonition-title::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: .5em;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: currentColor;
+}
+
+/* 正文 */
+.admonition p {
+  padding: .6em 1em;
   margin: 0;
-  padding: 0;
 }
+
+/* Inline 浮动版本 */
+.admonition.inline {
+  float: left;
+  width: 30%;
+  margin: 0 1em 1em 0;
+}
+.admonition.inline.end {
+  float: right;
+  margin: 0 0 1em 1em;
+}
+@media (max-width: 768px) {
+  .admonition.inline, .admonition.inline.end {
+    float: none;
+    width: 100%;
+    margin: 1em 0;
+  }
+}
+
+/* 类型定义（颜色 + 图标） */
+/* Note */
+.admonition.note { border-left-color: #448aff; color: #2962ff; }
+.admonition.note summary, .admonition.note .admonition-title { background: #e7f0fd; }
+.admonition.note summary::before, .admonition.note .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M1 3v10c0 .55.45 1 1 1h6v-2H3V4h10v3h2V3c0-.55-.45-1-1-1H2c-.55 0-1 .45-1 1zM11 10h1.5l-3.5 3.5L6.5 10H8V7h3v3z"/></svg>');
+}
+
+/* Abstract */
+.admonition.abstract { border-left-color: #00bfa5; color: #00796b; }
+.admonition.abstract summary, .admonition.abstract .admonition-title { background: #e0f2f1; }
+.admonition.abstract summary::before, .admonition.abstract .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" rx="2" ry="2"/></svg>');
+}
+
+/* Info */
+.admonition.info { border-left-color: #0288d1; color: #01579b; }
+.admonition.info summary, .admonition.info .admonition-title { background: #e1f5fe; }
+.admonition.info summary::before, .admonition.info .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/><line x1="8" y1="4" x2="8" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="12" r="1" fill="currentColor"/></svg>');
+}
+
+/* Tip */
+.admonition.tip { border-left-color: #43a047; color: #2e7d32; }
+.admonition.tip summary, .admonition.tip .admonition-title { background: #e8f5e9; }
+.admonition.tip summary::before, .admonition.tip .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 19l7-12H5l7 12z"/></svg>');
+}
+
+/* Success */
+.admonition.success { border-left-color: #2e7d32; color: #1b5e20; }
+.admonition.success summary, .admonition.success .admonition-title { background: #e8f5e9; }
+.admonition.success summary::before, .admonition.success .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>');
+}
+
+/* Question */
+.admonition.question { border-left-color: #6a1b9a; color: #4a148c; }
+.admonition.question summary, .admonition.question .admonition-title { background: #f3e5f5; }
+.admonition.question summary::before, .admonition.question .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v.01"/><path d="M12 12a2 2 0 1 0-2-2"/></svg>');
+}
+
+/* Warning */
+.admonition.warning { border-left-color: #f57c00; color: #e65100; }
+.admonition.warning summary, .admonition.warning .admonition-title { background: #fff3e0; }
+.admonition.warning summary::before, .admonition.warning .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12" y2="17"/></svg>');
+}
+
+/* Failure */
+.admonition.failure { border-left-color: #d50000; color: #b71c1c; }
+.admonition.failure summary, .admonition.failure .admonition-title { background: #ffebee; }
+.admonition.failure summary::before, .admonition.failure .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>');
+}
+
+/* Danger */
+.admonition.danger { border-left-color: #ff1744; color: #d32f2f; }
+.admonition.danger summary, .admonition.danger .admonition-title { background: #ffebee; }
+.admonition.danger summary::before, .admonition.danger .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l1.5 6h6l-5 3.7 2 6-5-3.7-5 3.7 2-6-5-3.7h6z"/></svg>');
+}
+
+/* Bug */
+.admonition.bug { border-left-color: #c51162; color: #ad1457; }
+.admonition.bug summary, .admonition.bug .admonition-title { background: #fce4ec; }
+.admonition.bug summary::before, .admonition.bug .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 2h6l.5 2H5.5L5 2zm3 12v-2h-2v2h2zM7 4v2H5.5L7 4z"/></svg>');
+}
+
+/* Example */
+.admonition.example { border-left-color: #7c4dff; color: #512da8; }
+.admonition.example summary, .admonition.example .admonition-title { background: #ede7f6; }
+.admonition.example summary::before, .admonition.example .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/></svg>');
+}
+
+/* Quote */
+.admonition.quote { border-left-color: #455a64; color: #263238; }
+.admonition.quote summary, .admonition.quote .admonition-title { background: #eceff1; }
+.admonition.quote summary::before, .admonition.quote .admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6 12h2v-6H6v6zm4 0h2v-6h-2v6z"/></svg>');
+}
+
+/* 保留后续原有内容不变 */
 
 html, body {
   font-size: 10px;

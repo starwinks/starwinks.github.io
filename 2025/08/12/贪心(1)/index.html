@@ -14,7 +14,7 @@
   
   <title>
     
-      archive_a: 2025/8 
+      贪心(1) 
       
       
       |
@@ -116,86 +116,116 @@
 
 
       <div class="flex-container">
-        <!-- 归档页，展示本站所有文章，按照年份降序归类，url形式：https://yoursite/archives/ -->
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<script>
+  window.superuser_password = 'moon.starwinks08';
+</script>
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
-<!-- last: 按年份把文章分组，当前遍历到的年份 -->
-<!-- now: 当前遍历到的文章的发布年份 -->
 
-<div class="container archives">
-  <div class="post-list">
-    
-        <!-- 后续文章的发布年份呈现 -->
-        <div class="content-title">
-          <h2>
-            <span>2025</span>
-          </h2>
+  <!-- LaTex Display -->
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      startup: {
+        ready: function() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(function() {
+            // 统一渲染逻辑：无论什么刷新方式都等待 DOM 完全准备
+            function ensureRender() {
+              if (document.readyState === 'complete') {
+                if (MathJax.typeset) MathJax.typeset();
+              } else {
+                setTimeout(ensureRender, 50);
+              }
+            }
+            ensureRender();
+          });
+        }
+      }
+    };
+  </script>
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">贪心(1)</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-08-12 20:42:13
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" title="贪心算法">
+                    #贪心算法
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+  
+  
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2025/08/11/%E6%9D%82%E8%AE%B0/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
         </div>
       
-      <div class="post-item" title="贪心(1)">
-        <div class="time-m-d">08-12</div>
-        <div class="title">
-          <a href="/2025/08/12/%E8%B4%AA%E5%BF%83(1)/">
-            <span>贪心(1)</span>
-          </a>
-        </div>
-      </div>
+    </div>
     
-      <div class="post-item" title="杂记">
-        <div class="time-m-d">08-11</div>
-        <div class="title">
-          <a href="/2025/08/11/%E6%9D%82%E8%AE%B0/">
-            <span>杂记</span>
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="熄灯/开灯算法">
-        <div class="time-m-d">08-11</div>
-        <div class="title">
-          <a href="/2025/08/11/%E7%86%84%E7%81%AF-%E5%BC%80%E7%81%AF%E7%AE%97%E6%B3%95/">
-            <span>熄灯/开灯算法</span>
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="记忆化搜索">
-        <div class="time-m-d">08-10</div>
-        <div class="title">
-          <a href="/2025/08/10/%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A2/">
-            <span>记忆化搜索</span>
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="html+css复现admonition">
-        <div class="time-m-d">08-10</div>
-        <div class="title">
-          <a href="/2025/08/10/admonition%E5%8F%82%E8%80%83/">
-            <span>html+css复现admonition</span>
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="algo基础板子">
-        <div class="time-m-d">08-10</div>
-        <div class="title">
-          <a href="/2025/08/10/algo%E5%9F%BA%E7%A1%80%E6%9D%BF%E5%AD%90/">
-            <span>algo基础板子</span>
-          </a>
-        </div>
-      </div>
-    
-      <div class="post-item" title="Hello World">
-        <div class="time-m-d">08-09</div>
-        <div class="title">
-          <a href="/2025/08/09/hello-world/">
-            <span>Hello World</span>
-          </a>
-        </div>
-      </div>
+
     
   </div>
-</div>
+
 
         
 <div class="footer">

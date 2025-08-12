@@ -125,16 +125,32 @@
 
   <!-- LaTex Display -->
 
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      startup: {
+        ready: function() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(function() {
+            // 统一渲染逻辑：无论什么刷新方式都等待 DOM 完全准备
+            function ensureRender() {
+              if (document.readyState === 'complete') {
+                if (MathJax.typeset) MathJax.typeset();
+              } else {
+                setTimeout(ensureRender, 50);
+              }
+            }
+            ensureRender();
+          });
+        }
+      }
+    };
+  </script>
   
     <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    }
-  </script>
 
 
 
@@ -245,6 +261,11 @@
             
           </div>
           <div class="post-foot-prev">
+            
+              <a href="/2025/08/11/%E6%9D%82%E8%AE%B0/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
             
           </div>
         </div>

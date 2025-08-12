@@ -125,16 +125,32 @@
 
   <!-- LaTex Display -->
 
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      startup: {
+        ready: function() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(function() {
+            // 统一渲染逻辑：无论什么刷新方式都等待 DOM 完全准备
+            function ensureRender() {
+              if (document.readyState === 'complete') {
+                if (MathJax.typeset) MathJax.typeset();
+              } else {
+                setTimeout(ensureRender, 50);
+              }
+            }
+            ensureRender();
+          });
+        }
+      }
+    };
+  </script>
   
     <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    }
-  </script>
 
 
 
@@ -162,13 +178,13 @@
   <!-- 关于页 url形式：https://yoursite/about/ -->
     <div class="container about-index">
       <div class="markdown-body">
-        <h1 id="Hello-World-👋"><a href="#Hello-World-👋" class="headerlink" title="Hello World 👋"></a>Hello World 👋</h1><p><a href="mailto:&#x73;&#x74;&#97;&#114;&#119;&#x69;&#x6e;&#x6b;&#x73;&#64;&#x66;&#x6f;&#120;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;"><img src="https://img.shields.io/badge/starwinks@qq.com-0078d7?style=flat&logo=tencentqq&logoColor=white" alt="Mail Badge"></a></p>
+        <h1 id="Hello-World-👋"><a href="#Hello-World-👋" class="headerlink" title="Hello World 👋"></a>Hello World 👋</h1><p><a href="mailto:&#115;&#116;&#x61;&#x72;&#119;&#x69;&#110;&#107;&#x73;&#64;&#102;&#x6f;&#120;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;"><img src="https://img.shields.io/badge/starwinks@qq.com-0078d7?style=flat&logo=tencentqq&logoColor=white" alt="Mail Badge"></a></p>
 <hr>
 <h2 id="🚀-About-Me-starwinks"><a href="#🚀-About-Me-starwinks" class="headerlink" title="🚀 About Me(starwinks)"></a>🚀 About Me(starwinks)</h2><ul>
 <li><strong>Computer Science</strong> undergraduate @ <strong>Nanjing University</strong> (NJU)</li>
 <li>📚 Passionate about <strong>coding</strong> and theoretical <strong>mathematics</strong> (like Discrete Mathematics)</li>
 <li>🌱 Currently learning in Nanjing, China.</li>
-<li>💬 Feel free to contact me on <a href="mailto:&#115;&#x74;&#x61;&#114;&#119;&#x69;&#110;&#x6b;&#115;&#x40;&#102;&#x6f;&#120;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;">starwinks@foxmail.com</a></li>
+<li>💬 Feel free to contact me on <a href="mailto:&#115;&#x74;&#x61;&#x72;&#x77;&#x69;&#110;&#107;&#x73;&#64;&#102;&#111;&#120;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">starwinks@foxmail.com</a></li>
 <li>⚡ Fun fact: <em><del>My favorite anime character is Elaina(see my avatar👆)</del></em></li>
 </ul>
 <h2 id="📬-Let’s-Connect"><a href="#📬-Let’s-Connect" class="headerlink" title="📬 Let’s Connect!"></a>📬 Let’s Connect!</h2><p><em>If you share a passion for algorithms, programming, discrete math, or just want to make a new friend— let’s talk!🌟</em></p>

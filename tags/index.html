@@ -125,16 +125,32 @@
 
   <!-- LaTex Display -->
 
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      startup: {
+        ready: function() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(function() {
+            // 统一渲染逻辑：无论什么刷新方式都等待 DOM 完全准备
+            function ensureRender() {
+              if (document.readyState === 'complete') {
+                if (MathJax.typeset) MathJax.typeset();
+              } else {
+                setTimeout(ensureRender, 50);
+              }
+            }
+            ensureRender();
+          });
+        }
+      }
+    };
+  </script>
   
     <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
   
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    }
-  </script>
 
 
 
@@ -156,7 +172,7 @@
   <!-- 标签页 url形式：https://yoursite/tags/ -->
   <div class="container tag-index">
     <div>
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/" rel="tag">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algo/" rel="tag">algo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello/" rel="tag">hello</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/practical-technology/" rel="tag">practical technology</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dynamic-Programming/" rel="tag">Dynamic Programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algo/" rel="tag">algo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello/" rel="tag">hello</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/practical-technology/" rel="tag">practical technology</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
   

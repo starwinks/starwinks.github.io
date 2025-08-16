@@ -14,7 +14,7 @@
   
   <title>
     
-      About 
+      线段覆盖问题(贪心) 
       
       
       |
@@ -175,27 +175,101 @@
   
 
   
-  <!-- 关于页 url形式：https://yoursite/about/ -->
-    <div class="container about-index">
-      <div class="markdown-body">
-        <h1 id="Hello-World-👋"><a href="#Hello-World-👋" class="headerlink" title="Hello World 👋"></a>Hello World 👋</h1><p><a href="mailto:&#x73;&#x74;&#97;&#x72;&#x77;&#105;&#x6e;&#107;&#x73;&#x40;&#x66;&#111;&#x78;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;"><img src="https://img.shields.io/badge/starwinks@qq.com-0078d7?style=flat&logo=tencentqq&logoColor=white" alt="Mail Badge"></a></p>
-<hr>
-<h2 id="🚀-About-Me-starwinks"><a href="#🚀-About-Me-starwinks" class="headerlink" title="🚀 About Me(starwinks)"></a>🚀 About Me(starwinks)</h2><ul>
-<li><strong>Computer Science</strong> undergraduate @ <strong>Nanjing University</strong> (NJU)</li>
-<li>📚 Passionate about <strong>coding</strong> and theoretical <strong>mathematics</strong> (like Discrete Mathematics)</li>
-<li>🌱 Currently learning in Nanjing, China.</li>
-<li>💬 Feel free to contact me on <a href="mailto:&#x73;&#116;&#x61;&#114;&#119;&#x69;&#x6e;&#107;&#x73;&#64;&#x66;&#111;&#x78;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#109;">starwinks@foxmail.com</a></li>
-<li>⚡ Fun fact: <em><del>My favorite anime character is Elaina(see my avatar👆)</del></em></li>
-</ul>
-<h2 id="📬-Let’s-Connect"><a href="#📬-Let’s-Connect" class="headerlink" title="📬 Let’s Connect!"></a>📬 Let’s Connect!</h2><p><em>If you share a passion for algorithms, programming, discrete math, or just want to make a new friend— let’s talk!🌟</em></p>
-<p>⚡ <strong>Quick links</strong>:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/starwinks"><img src="https://img.shields.io/badge/starwinks-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a></p>
-
-      </div>
-    </div>
-    
 
   
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">线段覆盖问题(贪心)</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-08-16 11:25:22
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E8%B4%AA%E5%BF%83/" title="贪心">
+                    #贪心
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+  
+  <h1 id="0-NOTE"><a href="#0-NOTE" class="headerlink" title="0. NOTE"></a>0. NOTE</h1><p>注意“线段相交”的定义，[1,2]和[3,4]算不算相交(结合实际问题)</p>
+<h1 id="1-求最多互不相交的线段数"><a href="#1-求最多互不相交的线段数" class="headerlink" title="1. 求最多互不相交的线段数"></a>1. 求最多互不相交的线段数</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1803">luogu P1803</a></p>
+<h2 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h2><p>线段右端点从小到大排序，维护右端点，依次遍历每条线段，<strong>若</strong>左端点大于(或大于等于)目前维护的右端点则答案＋1<strong>且</strong>更新右端点。</p>
+<h1 id="2-求线段总覆盖长度"><a href="#2-求线段总覆盖长度" class="headerlink" title="2. 求线段总覆盖长度"></a>2. 求线段总覆盖长度</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2082">luogu P2082</a></p>
+<h2 id="思路：-1"><a href="#思路：-1" class="headerlink" title="思路："></a>思路：</h2><p>左端点从小到大排序，遍历线段，记录左端点，维护右端点，若线段左端点小于等于右端点，右端点取max，否则累加长度，记录新的左端点。</p>
+<p>注：按此思路容易解决线段合并问题(最少可以看做几个合并后的互不相交线段)，<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2434">即luogu P2434</a></p>
+<h1 id="3-选择最少的线段覆盖给定区间"><a href="#3-选择最少的线段覆盖给定区间" class="headerlink" title="3. 选择最少的线段覆盖给定区间"></a>3. 选择最少的线段覆盖给定区间</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1668">luogu P1668</a>  </p>
+<h2 id="思路：-2"><a href="#思路：-2" class="headerlink" title="思路："></a>思路：</h2><p>采用贪心算法，线段按左端点升序排列，维护右端点，若线段左端点小于等于右端点，右端点取max,到不能遍历时ans++，更新右端点</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>例题中[1,2]和[3,4]相邻</li>
+<li>如果找不到左端点小于等于右端点要break，不然死循环</li>
+<li>right&gt;&#x3D;end后要及时break，否则ans大于答案</li>
+</ol>
+<blockquote>
+<p>本题还有dp做法，后续补充</p>
+</blockquote>
+<h1 id="4-任选最少点使每条线段内有点-点可重复使用"><a href="#4-任选最少点使每条线段内有点-点可重复使用" class="headerlink" title="4. 任选最少点使每条线段内有点(点可重复使用)"></a>4. 任选最少点使每条线段内有点(点可重复使用)</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/U248666">luogu U248666</a>  <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/description/">leetcode 452</a></p>
+<h2 id="思路：-3"><a href="#思路：-3" class="headerlink" title="思路："></a>思路：</h2><p>复用1即可，选则这些线段右端点</p>
+<h1 id="5-第四类升级：每条线段内点数量有要求"><a href="#5-第四类升级：每条线段内点数量有要求" class="headerlink" title="5.第四类升级：每条线段内点数量有要求"></a>5.第四类升级：每条线段内点数量有要求</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1250">luogu P1250</a><br>思路：顺着4的思路，先将线段按右端点升序排序，之后遍历每条线段，从右端点开始种够数量，依次类推<br>建议使用数组维护已经选取的点（暴力遍历即可）</p>
+<h1 id="6-给定线段和点，取若干点使得最多线段被匹配"><a href="#6-给定线段和点，取若干点使得最多线段被匹配" class="headerlink" title="6.给定线段和点，取若干点使得最多线段被匹配"></a>6.给定线段和点，取若干点使得最多线段被<mark>匹配</mark></h1><p><mark><strong>一个点只能和一条线段匹配</strong></mark><br>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2887">luogu P2887</a></p>
+<h2 id="思路一："><a href="#思路一：" class="headerlink" title="思路一："></a>思路一：</h2><p>我们考虑给定的一个线段，如果一个点大于它的左端点，那么这个点越小“越有利”(越可能被这条线段覆盖)。那么，从贪心的角度来说，我们应该在右端左边的点中选择一个尽可能大的，这样（大于左端点的）剩下的点对于其他线段是有利的（为了保证有利性，要求剩下的点也要在其他线段左端的右边。由此我们确定了线段按左端点降序排序，点降序排序；<br>暴力遍历线段，选择满足要求的点中最大的；</p>
+<h2 id="思路二："><a href="#思路二：" class="headerlink" title="思路二："></a>思路二：</h2><p>与思路一对称，线段按右端点升序，点升序排列也可以</p>
+<p>也可以这样思考：朴素地想法是先尽量满足“中间的”线段，这是由左端点降序或者右端点升序所绝定的。然后在再考虑要选择靠近哪个方向的点，实际上那个如果已经确定了一个边界，点越靠近那个方向越有利，那么在贪心的时候就要采取反过来的策略（先来的先挑选不太好的情况）</p>
+<h1 id="7-4的对偶，点固定，线长度固定，选最少线使点全被覆盖"><a href="#7-4的对偶，点固定，线长度固定，选最少线使点全被覆盖" class="headerlink" title="7. 4的对偶，点固定，线长度固定，选最少线使点全被覆盖"></a>7. 4的对偶，点固定，线长度固定，选最少线使点全被覆盖</h1><p>例题：<a target="_blank" rel="noopener" href="https://oj.sdutacm.cn/onlinejudge3/problems/1751">SDUT 1751</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>一个很自然地想法是以点为中心，线长度一半为臂长展开成线段，线段中心变换为点，由此又转化为问题4</p>
+<h2 id="升级1：一维变二维"><a href="#升级1：一维变二维" class="headerlink" title="升级1：一维变二维"></a>升级1：一维变二维</h2><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1325">luogu P1325</a><br>转化为要求在x轴上的线段即可（注意开double，用eps，注意-1的情况）</p>
+<h2 id="升级2：线的数量固定，反求线段最小长度"><a href="#升级2：线的数量固定，反求线段最小长度" class="headerlink" title="升级2：线的数量固定，反求线段最小长度"></a>升级2：线的数量固定，反求线段最小长度</h2><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P6174">luogu P6174</a><br>二分答案即可</p>
+
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2025/08/12/%E8%B4%AA%E5%BF%83(1)/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-NOTE"><span class="toc-text">0. NOTE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%B1%82%E6%9C%80%E5%A4%9A%E4%BA%92%E4%B8%8D%E7%9B%B8%E4%BA%A4%E7%9A%84%E7%BA%BF%E6%AE%B5%E6%95%B0"><span class="toc-text">1. 求最多互不相交的线段数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="toc-text">思路：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%B1%82%E7%BA%BF%E6%AE%B5%E6%80%BB%E8%A6%86%E7%9B%96%E9%95%BF%E5%BA%A6"><span class="toc-text">2. 求线段总覆盖长度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A-1"><span class="toc-text">思路：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E9%80%89%E6%8B%A9%E6%9C%80%E5%B0%91%E7%9A%84%E7%BA%BF%E6%AE%B5%E8%A6%86%E7%9B%96%E7%BB%99%E5%AE%9A%E5%8C%BA%E9%97%B4"><span class="toc-text">3. 选择最少的线段覆盖给定区间</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A-2"><span class="toc-text">思路：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E4%BB%BB%E9%80%89%E6%9C%80%E5%B0%91%E7%82%B9%E4%BD%BF%E6%AF%8F%E6%9D%A1%E7%BA%BF%E6%AE%B5%E5%86%85%E6%9C%89%E7%82%B9-%E7%82%B9%E5%8F%AF%E9%87%8D%E5%A4%8D%E4%BD%BF%E7%94%A8"><span class="toc-text">4. 任选最少点使每条线段内有点(点可重复使用)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A-3"><span class="toc-text">思路：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%AC%AC%E5%9B%9B%E7%B1%BB%E5%8D%87%E7%BA%A7%EF%BC%9A%E6%AF%8F%E6%9D%A1%E7%BA%BF%E6%AE%B5%E5%86%85%E7%82%B9%E6%95%B0%E9%87%8F%E6%9C%89%E8%A6%81%E6%B1%82"><span class="toc-text">5.第四类升级：每条线段内点数量有要求</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%BB%99%E5%AE%9A%E7%BA%BF%E6%AE%B5%E5%92%8C%E7%82%B9%EF%BC%8C%E5%8F%96%E8%8B%A5%E5%B9%B2%E7%82%B9%E4%BD%BF%E5%BE%97%E6%9C%80%E5%A4%9A%E7%BA%BF%E6%AE%B5%E8%A2%AB%E5%8C%B9%E9%85%8D"><span class="toc-text">6.给定线段和点，取若干点使得最多线段被匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%80%EF%BC%9A"><span class="toc-text">思路一：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C%EF%BC%9A"><span class="toc-text">思路二：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-4%E7%9A%84%E5%AF%B9%E5%81%B6%EF%BC%8C%E7%82%B9%E5%9B%BA%E5%AE%9A%EF%BC%8C%E7%BA%BF%E9%95%BF%E5%BA%A6%E5%9B%BA%E5%AE%9A%EF%BC%8C%E9%80%89%E6%9C%80%E5%B0%91%E7%BA%BF%E4%BD%BF%E7%82%B9%E5%85%A8%E8%A2%AB%E8%A6%86%E7%9B%96"><span class="toc-text">7. 4的对偶，点固定，线长度固定，选最少线使点全被覆盖</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%87%E7%BA%A71%EF%BC%9A%E4%B8%80%E7%BB%B4%E5%8F%98%E4%BA%8C%E7%BB%B4"><span class="toc-text">升级1：一维变二维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%87%E7%BA%A72%EF%BC%9A%E7%BA%BF%E7%9A%84%E6%95%B0%E9%87%8F%E5%9B%BA%E5%AE%9A%EF%BC%8C%E5%8F%8D%E6%B1%82%E7%BA%BF%E6%AE%B5%E6%9C%80%E5%B0%8F%E9%95%BF%E5%BA%A6"><span class="toc-text">升级2：线的数量固定，反求线段最小长度</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
 
         
 <div class="footer">

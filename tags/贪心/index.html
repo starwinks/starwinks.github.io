@@ -14,8 +14,8 @@
   
   <title>
     
-      About 
-      
+      Tag 
+       : 贪心
       
       |
     
@@ -116,86 +116,30 @@
 
 
       <div class="flex-container">
-        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
-<script>
-  window.superuser_password = 'moon.starwinks08';
-</script>
-<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+        <!-- 标签详情页，展示某个标签下的文章列表，url形式：https://yoursite/tags/某个标签/ -->
 
-
-  <!-- LaTex Display -->
-
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      },
-      startup: {
-        ready: function() {
-          MathJax.startup.defaultReady();
-          MathJax.startup.promise.then(function() {
-            // 统一渲染逻辑：无论什么刷新方式都等待 DOM 完全准备
-            function ensureRender() {
-              if (document.readyState === 'complete') {
-                if (MathJax.typeset) MathJax.typeset();
-              } else {
-                setTimeout(ensureRender, 50);
-              }
-            }
-            ensureRender();
-          });
-        }
-      }
-    };
-  </script>
+<div class="container tag-details">
+  <div class="content-title">
+    <h2>
+      <span>贪心</span>
+    </h2>
+  </div>
   
-    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-  
-
-
-
-
-
-  <!-- clipboard -->
-
-  
-    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
-  
-  
-<script src="/js/codeCopy.js"></script>
-
-
-
-
-
-
-
-  
-
-  
-
-  
-  <!-- 关于页 url形式：https://yoursite/about/ -->
-    <div class="container about-index">
-      <div class="markdown-body">
-        <h1 id="Hello-World-👋"><a href="#Hello-World-👋" class="headerlink" title="Hello World 👋"></a>Hello World 👋</h1><p><a href="mailto:&#x73;&#x74;&#97;&#x72;&#x77;&#105;&#x6e;&#107;&#x73;&#x40;&#x66;&#111;&#x78;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;"><img src="https://img.shields.io/badge/starwinks@qq.com-0078d7?style=flat&logo=tencentqq&logoColor=white" alt="Mail Badge"></a></p>
-<hr>
-<h2 id="🚀-About-Me-starwinks"><a href="#🚀-About-Me-starwinks" class="headerlink" title="🚀 About Me(starwinks)"></a>🚀 About Me(starwinks)</h2><ul>
-<li><strong>Computer Science</strong> undergraduate @ <strong>Nanjing University</strong> (NJU)</li>
-<li>📚 Passionate about <strong>coding</strong> and theoretical <strong>mathematics</strong> (like Discrete Mathematics)</li>
-<li>🌱 Currently learning in Nanjing, China.</li>
-<li>💬 Feel free to contact me on <a href="mailto:&#x73;&#116;&#x61;&#114;&#119;&#x69;&#x6e;&#107;&#x73;&#64;&#x66;&#111;&#x78;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#109;">starwinks@foxmail.com</a></li>
-<li>⚡ Fun fact: <em><del>My favorite anime character is Elaina(see my avatar👆)</del></em></li>
-</ul>
-<h2 id="📬-Let’s-Connect"><a href="#📬-Let’s-Connect" class="headerlink" title="📬 Let’s Connect!"></a>📬 Let’s Connect!</h2><p><em>If you share a passion for algorithms, programming, discrete math, or just want to make a new friend— let’s talk!🌟</em></p>
-<p>⚡ <strong>Quick links</strong>:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/starwinks"><img src="https://img.shields.io/badge/starwinks-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a></p>
-
+    <div class="post-list">
+      <div class="post-item" title="线段覆盖问题(贪心)">
+        <span class="time-m-d">2025-08-15</span>
+        <a href="/2025/08/15/%E7%BA%BF%E6%AE%B5%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/">
+          <span>线段覆盖问题(贪心)</span>
+        </a>
       </div>
     </div>
-    
-
   
+  <nav class="post-navigation">
+    
+    <span class="page-num">1 / 1</span>
+    
+  </nav>
+</div>
 
         
 <div class="footer">

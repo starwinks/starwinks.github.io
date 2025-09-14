@@ -10,11 +10,14 @@
   
   <!-- 用于搜索引擎的文章摘要 -->
   
+  <!-- 文章页 -->
+  <meta name="description" content="cf例题选讲" />
+  
   
   
   <title>
     
-      About 
+      cfpart1 
       
       
       |
@@ -175,27 +178,86 @@
   
 
   
-  <!-- 关于页 url形式：https://yoursite/about/ -->
-    <div class="container about-index">
-      <div class="markdown-body">
-        <h1 id="Hello-World-👋"><a href="#Hello-World-👋" class="headerlink" title="Hello World 👋"></a>Hello World 👋</h1><p><a href="mailto:&#115;&#116;&#97;&#x72;&#x77;&#x69;&#x6e;&#x6b;&#x73;&#64;&#x66;&#111;&#120;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;"><img src="https://img.shields.io/badge/starwinks@qq.com-0078d7?style=flat&logo=tencentqq&logoColor=white" alt="Mail Badge"></a></p>
-<hr>
-<h2 id="🚀-About-Me-starwinks"><a href="#🚀-About-Me-starwinks" class="headerlink" title="🚀 About Me(starwinks)"></a>🚀 About Me(starwinks)</h2><ul>
-<li><strong>Computer Science</strong> undergraduate @ <strong>Nanjing University</strong> (NJU)</li>
-<li>📚 Passionate about <strong>coding</strong> and theoretical <strong>mathematics</strong> (like Discrete Mathematics)</li>
-<li>🌱 Currently learning in Nanjing, China.</li>
-<li>💬 Feel free to contact me on <a href="mailto:&#115;&#x74;&#x61;&#114;&#x77;&#x69;&#x6e;&#x6b;&#x73;&#64;&#102;&#x6f;&#x78;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;">starwinks@foxmail.com</a></li>
-<li>⚡ Fun fact: <em><del>My favorite anime character is Elaina(see my avatar👆)</del></em></li>
-</ul>
-<h2 id="📬-Let’s-Connect"><a href="#📬-Let’s-Connect" class="headerlink" title="📬 Let’s Connect!"></a>📬 Let’s Connect!</h2><p><em>If you share a passion for algorithms, programming, discrete math, or just want to make a new friend— let’s talk!🌟</em></p>
-<p>⚡ <strong>Quick links</strong>:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/starwinks"><img src="https://img.shields.io/badge/starwinks-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a></p>
-
-      </div>
-    </div>
-    
 
   
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">cfpart1</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-09-14 22:52:13
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/cf/" title="cf">
+                    #cf
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+  
+  <h1 id="1-1050div4e"><a href="#1-1050div4e" class="headerlink" title="1. 1050div4e"></a>1. <a target="_blank" rel="noopener" href="https://codeforces.com/contest/2148/problem/E">1050div4e</a></h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定$cnt[x]$表示$x$的次数,数组$a[i]$,求$a[i]$的子数组$a[l..r]$的个数,使得$\forall i \in[l,r],fre[a[i]]\leq cnt[a[i]]$  </p>
+<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><ol>
+<li>一个很自然的想法是枚举左边界$l$,每次固定左边界$l$,右边界$r$从头($l$)开始遍历,直到不满足条件为止,复杂度$\Theta(n^2)$  </li>
+<li>在此基础上进行一些简单的优化,如果[$l,r$]满足条件,那么[$l+1,r$]也满足条件,因此右边界$r$不需要每次从头开始遍历,而是从上一次的$r$开始遍历,复杂度$\Theta(n)$  </li>
+<li>具体实现的时候,我们有一个更加规范的思路:$r$从头开始逐渐递增,维护$l$,循环移动$l$直到满足条件,对应右边界$r$对于答案的贡献为$r-l+1$,复杂度$\Theta(n)$</li>
+</ol>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><details class="admonition success" >
+  <summary>ACCode</summary>
+  <p>
+  
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN=<span class="number">1e5</span><span class="number">+5</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">    cin.<span class="built_in">tie</span>(<span class="literal">nullptr</span>),cout.<span class="built_in">tie</span>(<span class="literal">nullptr</span>);</span><br><span class="line">    <span class="type">int</span> TT;</span><br><span class="line">    cin&gt;&gt;TT;</span><br><span class="line">    <span class="keyword">while</span>(TT--)&#123;</span><br><span class="line">        <span class="type">int</span> n,k;</span><br><span class="line">        cin&gt;&gt;n&gt;&gt;k;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">a</span><span class="params">(n<span class="number">+1</span>)</span></span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">cnt</span><span class="params">(n<span class="number">+1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)cin&gt;&gt;a[i],cnt[a[i]]++;</span><br><span class="line">        <span class="type">bool</span> flag=<span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(cnt[i]%k!=<span class="number">0</span>)&#123;</span><br><span class="line">                flag=<span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!flag)&#123;</span><br><span class="line">            cout&lt;&lt;<span class="string">&quot;0\n&quot;</span>;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            cnt[i]/=k;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">seen</span><span class="params">(n<span class="number">+1</span>)</span></span>;</span><br><span class="line">        <span class="type">int</span> l=<span class="number">1</span>;</span><br><span class="line">        ll ans=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> r=<span class="number">1</span>;r&lt;=n;r++)&#123;</span><br><span class="line">            seen[a[r]]++;</span><br><span class="line">            <span class="keyword">while</span>(seen[a[r]]&gt;cnt[a[r]])&#123;</span><br><span class="line">                seen[a[l]]--;</span><br><span class="line">                l++;</span><br><span class="line">            &#125;</span><br><span class="line">            ans+=r-l<span class="number">+1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout&lt;&lt;ans&lt;&lt;<span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+  </p>
+</details>
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2025/08/27/%E6%95%B0%E8%AE%BA/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-1050div4e"><span class="toc-text">1. 1050div4e</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-text">题目描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95"><span class="toc-text">解法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
 
         
 <div class="footer">

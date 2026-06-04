@@ -1,0 +1,59 @@
+# macOS Browser Edition — App Registry
+# All app definitions. Add/remove/modify apps here.
+apps:
+  finder:
+    name: Finder
+    icon: "💾"
+    url: apps/finder.html
+    width: 800
+    height: 520
+    default_open: true
+
+  terminal:
+    name: Terminal
+    icon: "💻"
+    url: apps/terminal.html
+    width: 700
+    height: 440
+
+  notes:
+    name: Notes
+    icon: "📝"
+    url: apps/notes.html
+    width: 720
+    height: 500
+
+  calculator:
+    name: Calculator
+    icon: "🔢"
+    url: apps/calculator.html
+    width: 280
+    height: 420
+
+  settings:
+    name: Settings
+    icon: "⚙️"
+    url: apps/settings.html
+    width: 680
+    height: 500
+
+  textedit:
+    name: TextEdit
+    icon: "📄"
+    url: apps/textedit.html
+    width: 650
+    height: 460
+
+  monitor:
+    name: Monitor
+    icon: "📊"
+    url: apps/monitor.html
+    width: 600
+    height: 420
+
+  browser:
+    name: Browser
+    icon: "🌐"
+    url: apps/browser.html
+    width: 900
+    height: 560

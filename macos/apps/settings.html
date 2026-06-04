@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/app-common.css">
+<style>
+  .settings-layout { display: flex; height: 100%; }
+  .settings-sidebar { width: 180px; border-right: 0.5px solid var(--app-border); padding: 8px 0; overflow-y: auto; }
+  .settings-main { flex: 1; overflow-y: auto; padding: 24px 32px; }
+  .settings-section { margin-bottom: 28px; }
+  .settings-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .settings-section .desc { font-size: 11px; color: var(--app-text-secondary); margin-bottom: 10px; }
+  .settings-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  }
+  .settings-row .label { font-size: 12px; }
+  .settings-row .sublabel { font-size: 10px; color: var(--app-text-secondary); margin-top: 2px; }
+  .settings-row select {
+    padding: 4px 8px; border-radius: 4px; background: var(--app-input-bg);
+    color: var(--app-text); border: 0.5px solid var(--app-border); font-size: 12px;
+    font-family: var(--app-font); outline: none;
+  }
+  .wallpaper-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+  .wallpaper-thumb {
+    width: 100px; height: 64px; border-radius: 6px; cursor: default;
+    border: 2px solid transparent; transition: border-color 0.15s;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+  }
+  .wallpaper-thumb:hover { border-color: rgba(255,255,255,0.3); }
+  .wallpaper-thumb.selected { border-color: var(--app-accent); }
+  .about-icon { font-size: 64px; text-align: center; margin-bottom: 8px; }
+  .about-text { text-align: center; font-size: 12px; color: var(--app-text-secondary); line-height: 1.6; }
+  .storage-bar {
+    height: 8px; border-radius: 4px; background: rgba(255,255,255,0.1);
+    margin-top: 8px; overflow: hidden;
+  }
+  .storage-bar-fill { height: 100%; border-radius: 4px; background: var(--app-accent); }
+</style>
+</head>
+<body>
+<div class="settings-layout">
+  <div class="settings-sidebar">
+    <div class="sidebar-item active" data-panel="general"><span class="si-icon">⚙️</span> General</div>
+    <div class="sidebar-item" data-panel="desktop"><span class="si-icon">🖥</span> Desktop & Dock</div>
+    <div class="sidebar-item" data-panel="display"><span class="si-icon">🖥</span> Displays</div>
+    <div class="sidebar-item" data-panel="appearance"><span class="si-icon">🎨</span> Appearance</div>
+    <div class="sidebar-item" data-panel="sound"><span class="si-icon">🔊</span> Sound</div>
+    <div class="sidebar-item" data-panel="notifications"><span class="si-icon">🔔</span> Notifications</div>
+    <div class="sidebar-item" data-panel="storage"><span class="si-icon">💾</span> Storage</div>
+    <div class="sidebar-item" data-panel="about"><span class="si-icon">ℹ️</span> About</div>
+  </div>
+  <div class="settings-main" id="settings-panel"></div>
+</div>
+
+<script>
+const DB = window.parent.dbManager;
+
+function s(key, fallback) { return DB ? DB.getSetting(key) ?? fallback : String(fallback); }
+function setS(key, val) { if (DB) DB.setSetting(key, String(val)); }
+
+function makeToggle(key) {
+  const on = s(key, 'false') === 'true';
+  return `<div class="toggle${on ? ' on' : ''}" data-key="${key}" onclick="toggleSetting(this)"></div>`;
+}
+
+function makeSelect(key, options, selectedVal) {
+  const val = s(key, selectedVal);
+  let html = `<select data-key="${key}" onchange="selectSetting(this)">`;
+  for (const opt of options) {
+    html += `<option value="${opt}"${opt === val ? ' selected' : ''}>${opt}</option>`;
+  }
+  html += '</select>';
+  return html;
+}
+
+window.toggleSetting = function(el) {
+  el.classList.toggle('on');
+  setS(el.dataset.key, el.classList.contains('on') ? 'true' : 'false');
+  if (el.dataset.key === 'wallpaper') {
+    window.parent.postMessage({ type: 'notify', body: 'Wallpaper preference saved' }, '*');
+  }
+};
+
+window.selectSetting = function(el) {
+  setS(el.dataset.key, el.value);
+};
+
+window.selectWallpaper = function(el) {
+  document.querySelectorAll('.wallpaper-thumb').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  setS('wallpaper', el.dataset.wp);
+  window.parent.postMessage({ type: 'notify', body: 'Wallpaper updated (refresh to see full effect)' }, '*');
+};
+
+window.showPanel = function(name) {
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.panel === name);
+  });
+  document.getElementById('settings-panel').innerHTML = panels[name] || '';
+  const titles = {
+    general: 'General Settings', desktop: 'Desktop & Dock Settings',
+    display: 'Display Settings', appearance: 'Appearance Settings',
+    sound: 'Sound Settings', notifications: 'Notification Settings',
+    storage: 'Storage Settings', about: 'About This Mac',
+  };
+  window.parent.postMessage({ type: 'set-title', title: titles[name] || 'Settings' }, '*');
+};
+
+const panels = {
+  general: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">General</h2>
+    <div class="settings-section">
+      <h3>About</h3>
+      <div class="settings-row">
+        <div><div class="label">Software Update</div><div class="sublabel">macOS 15.0 (24A335)</div></div>
+        <span style="color:var(--app-accent);font-size:12px;">Up to date ✓</span>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>Default Web Browser</h3>
+      <div class="settings-row">
+        <div class="label">Default web browser</div>
+        ${makeSelect('default_browser', ['Safari','Chrome','Firefox'], 'Safari')}
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>Language & Region</h3>
+      <div class="settings-row">
+        <div><div class="label">Preferred Language</div><div class="sublabel">English is the primary language</div></div>
+        ${makeSelect('language', ['English','中文 (Chinese)','日本語'], 'English')}
+      </div>
+    </div>
+  `,
+
+  desktop: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">Desktop & Dock</h2>
+    <div class="settings-section">
+      <h3>Desktop</h3>
+      <div class="desc">Choose a desktop wallpaper</div>
+      <div class="wallpaper-grid">
+        <div class="wallpaper-thumb${s('wallpaper','default')==='default'?' selected':''}" data-wp="default" onclick="selectWallpaper(this)" style="background:linear-gradient(135deg,#1a1a2e,#0f3460)">🌌</div>
+        <div class="wallpaper-thumb${s('wallpaper','default')==='sunset'?' selected':''}" data-wp="sunset" onclick="selectWallpaper(this)" style="background:linear-gradient(135deg,#2d1b69,#ff6b6b)">🌅</div>
+        <div class="wallpaper-thumb${s('wallpaper','default')==='forest'?' selected':''}" data-wp="forest" onclick="selectWallpaper(this)" style="background:linear-gradient(135deg,#134e5e,#71b280)">🌿</div>
+        <div class="wallpaper-thumb${s('wallpaper','default')==='night'?' selected':''}" data-wp="night" onclick="selectWallpaper(this)" style="background:linear-gradient(135deg,#0f0c29,#302b63)">🌃</div>
+        <div class="wallpaper-thumb${s('wallpaper','default')==='ocean'?' selected':''}" data-wp="ocean" onclick="selectWallpaper(this)" style="background:linear-gradient(135deg,#1a1a2e,#162d50)">🌊</div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>Dock</h3>
+      <div class="settings-row">
+        <div><div class="label">Magnification</div><div class="sublabel">Enlarge icons when hovering</div></div>
+        ${makeToggle('dock_magnification')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Position on screen</div></div>
+        ${makeSelect('dock_position', ['Bottom','Left','Right'], 'Bottom')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Automatically hide and show the Dock</div></div>
+        ${makeToggle('dock_auto_hide')}
+      </div>
+    </div>
+  `,
+
+  display: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">Displays</h2>
+    <div class="settings-section">
+      <h3>Built-in Display</h3>
+      <div class="settings-row">
+        <div><div class="label">Resolution</div><div class="sublabel">3024 × 1964 (Liquid Retina XDR)</div></div>
+        ${makeSelect('resolution', ['Default for Display','Scaled: 1512×982','Scaled: 2048×1328'], 'Default for Display')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Refresh Rate</div></div>
+        ${makeSelect('refresh_rate', ['ProMotion (Up to 120Hz)','60Hz'], 'ProMotion (Up to 120Hz)')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">True Tone</div><div class="sublabel">Automatically adjust display color</div></div>
+        ${makeToggle('true_tone')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Night Shift</div><div class="sublabel">Warm colors at night</div></div>
+        ${makeToggle('night_shift')}
+      </div>
+    </div>
+  `,
+
+  appearance: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">Appearance</h2>
+    <div class="settings-section">
+      <h3>Appearance</h3>
+      <div class="settings-row">
+        <div class="label">Appearance</div>
+        ${makeSelect('appearance', ['Auto','Dark','Light'], 'Dark')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Accent Color</div></div>
+        ${makeSelect('accent_color', ['Blue','Purple','Pink','Red','Orange','Green'], 'Blue')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Show scroll bars</div></div>
+        ${makeSelect('scroll_bars', ['Automatically','Always','When scrolling'], 'Automatically')}
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>Font</h3>
+      <div class="settings-row">
+        <div><div class="label">System Font Size</div></div>
+        ${makeSelect('font_size', ['Small','Medium','Large'], 'Medium')}
+      </div>
+    </div>
+  `,
+
+  sound: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">Sound</h2>
+    <div class="settings-section">
+      <h3>Output</h3>
+      <div class="settings-row">
+        <div><div class="label">Output Device</div><div class="sublabel">Type: Built-in Speakers</div></div>
+        ${makeSelect('output_device', ['MacBook Pro Speakers','External Headphones'], 'MacBook Pro Speakers')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Output Volume</div></div>
+        <input type="range" min="0" max="100" value="${s('sound_volume','70')}" style="width:120px;accent-color:var(--app-accent);" onchange="setS('sound_volume', this.value)">
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>Sound Effects</h3>
+      <div class="settings-row">
+        <div><div class="label">Alert Sound</div></div>
+        ${makeSelect('sound_effects', ['Funk','Glass','Hero','Ping'], 'Funk')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Play sound on startup</div></div>
+        ${makeToggle('startup_sound')}
+      </div>
+    </div>
+  `,
+
+  notifications: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">Notifications</h2>
+    <div class="settings-section">
+      <h3>Notification Center</h3>
+      <div class="settings-row">
+        <div><div class="label">Show previews</div><div class="sublabel">Show notification previews when unlocked</div></div>
+        ${makeSelect('notif_previews', ['Always','When Unlocked','Never'], 'When Unlocked')}
+      </div>
+      <div class="settings-row">
+        <div><div class="label">Allow notifications from applications</div></div>
+        ${makeToggle('notifications_enabled')}
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3>Focus</h3>
+      <div class="settings-row">
+        <div><div class="label">Do Not Disturb</div><div class="sublabel">Silence notifications</div></div>
+        ${makeToggle('do_not_disturb')}
+      </div>
+    </div>
+  `,
+
+  storage: `
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:20px;">Storage</h2>
+    <div class="settings-section">
+      <h3>Macintosh HD</h3>
+      <div class="settings-row" style="flex-direction:column;align-items:stretch;">
+        <div class="label" style="margin-bottom:4px;">512 GB Flash Storage</div>
+        <div class="storage-bar"><div class="storage-bar-fill" style="width:44%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--app-text-secondary);">
+          <span>223 GB used</span><span>289 GB free</span>
+        </div>
+      </div>
+      <div class="settings-row"><div class="label">Applications</div><span style="font-size:12px;">42.3 GB</span></div>
+      <div class="settings-row"><div class="label">Documents</div><span style="font-size:12px;">87.1 GB</span></div>
+      <div class="settings-row"><div class="label">System Data</div><span style="font-size:12px;">54.2 GB</span></div>
+      <div class="settings-row"><div class="label">iOS Files</div><span style="font-size:12px;">18.4 GB</span></div>
+      <div class="settings-row"><div class="label">Music & Media</div><span style="font-size:12px;">21.0 GB</span></div>
+    </div>
+  `,
+
+  about: `
+    <div class="about-icon">💾</div>
+    <h2 style="text-align:center;font-size:18px;font-weight:600;">macOS<br>Browser Edition</h2>
+    <div class="about-text" style="margin-top:12px;">
+      Version 15.0 (Build 24A335)<br><br>
+      A browser-based macOS simulation<br>
+      Built with HTML, CSS & JavaScript<br>
+      SQLite persistence via sql.js<br><br>
+      <span style="opacity:0.5;">Simulated on MacBook Pro (14-inch, 2026)<br>
+      Apple M5 Pro · 16 GB · 512 GB SSD<br>
+      Display: 14" Liquid Retina XDR 3024×1964</span>
+    </div>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="app-btn" onclick="window.parent.postMessage({type:'notify',body:'System Report would open here'},'*')">System Report...</button>
+    </div>
+  `
+};
+
+// Init
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', () => showPanel(item.dataset.panel));
+});
+showPanel('general');
+window.parent.postMessage({ type: 'set-title', title: 'Settings' }, '*');
+</script>
+</body>
+</html>

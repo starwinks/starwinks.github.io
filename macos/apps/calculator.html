@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/app-common.css">
+<style>
+  body { background: #1c1c1e; display: flex; justify-content: center; align-items: center; }
+  .calc {
+    width: 260px; display: flex; flex-direction: column; gap: 1px;
+    background: #000; border-radius: 10px; overflow: hidden;
+  }
+  .calc-display {
+    padding: 16px 20px 8px; text-align: right; min-height: 70px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .calc-expression { font-size: 14px; color: #888; min-height: 20px; word-break: break-all; }
+  .calc-result { font-size: 36px; font-weight: 300; color: #fff; word-break: break-all; }
+  .calc-row { display: flex; gap: 1px; }
+  .calc-btn {
+    flex: 1; height: 52px; border: none; font-size: 18px; font-family: var(--app-font);
+    cursor: default; color: #fff; transition: filter 0.1s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .calc-btn:active { filter: brightness(1.5); }
+  .calc-btn.num { background: #505050; font-size: 20px; }
+  .calc-btn.op { background: #ff9f0a; font-size: 22px; }
+  .calc-btn.func { background: #3a3a3c; }
+  .calc-btn.zero { flex: 2.07; border-radius: 0 0 0 10px; text-align: left; padding-left: 24px; justify-content: flex-start; }
+  .calc-btn.equals { background: #ff9f0a; border-radius: 0 0 10px 0; }
+  .calc-btn.wide { flex: 2.07; }
+</style>
+</head>
+<body>
+<div class="calc">
+  <div class="calc-display">
+    <div class="calc-expression" id="expr"></div>
+    <div class="calc-result" id="result">0</div>
+  </div>
+  <div class="calc-row">
+    <button class="calc-btn func" data-action="clear">AC</button>
+    <button class="calc-btn func" data-action="negate">±</button>
+    <button class="calc-btn func" data-action="percent">%</button>
+    <button class="calc-btn op" data-action="operator" data-op="/">÷</button>
+  </div>
+  <div class="calc-row">
+    <button class="calc-btn num" data-action="digit" data-value="7">7</button>
+    <button class="calc-btn num" data-action="digit" data-value="8">8</button>
+    <button class="calc-btn num" data-action="digit" data-value="9">9</button>
+    <button class="calc-btn op" data-action="operator" data-op="*">×</button>
+  </div>
+  <div class="calc-row">
+    <button class="calc-btn num" data-action="digit" data-value="4">4</button>
+    <button class="calc-btn num" data-action="digit" data-value="5">5</button>
+    <button class="calc-btn num" data-action="digit" data-value="6">6</button>
+    <button class="calc-btn op" data-action="operator" data-op="-">−</button>
+  </div>
+  <div class="calc-row">
+    <button class="calc-btn num" data-action="digit" data-value="1">1</button>
+    <button class="calc-btn num" data-action="digit" data-value="2">2</button>
+    <button class="calc-btn num" data-action="digit" data-value="3">3</button>
+    <button class="calc-btn op" data-action="operator" data-op="+">+</button>
+  </div>
+  <div class="calc-row">
+    <button class="calc-btn num zero" data-action="digit" data-value="0">0</button>
+    <button class="calc-btn num" data-action="decimal">.</button>
+    <button class="calc-btn equals" data-action="equals">=</button>
+  </div>
+</div>
+
+<script>
+const exprEl = document.getElementById('expr');
+const resultEl = document.getElementById('result');
+
+let current = '0';
+let previous = '';
+let operator = null;
+let shouldReset = false;
+let expression = '';
+
+function updateDisplay() {
+  resultEl.textContent = current;
+  exprEl.textContent = expression;
+}
+
+function calculate(a, op, b) {
+  const x = parseFloat(a);
+  const y = parseFloat(b);
+  switch (op) {
+    case '+': return x + y;
+    case '-': return x - y;
+    case '*': return x * y;
+    case '/': return y !== 0 ? x / y : 'Error';
+    default: return y;
+  }
+}
+
+document.querySelectorAll('.calc-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const action = btn.dataset.action;
+
+    if (action === 'digit') {
+      if (shouldReset) { current = '0'; shouldReset = false; }
+      current = current === '0' ? btn.dataset.value : current + btn.dataset.value;
+      updateDisplay();
+    }
+
+    if (action === 'decimal') {
+      if (shouldReset) { current = '0'; shouldReset = false; }
+      if (!current.includes('.')) current += '.';
+      updateDisplay();
+    }
+
+    if (action === 'operator') {
+      if (operator && !shouldReset) {
+        const result = calculate(previous, operator, current);
+        current = String(result);
+        resultEl.textContent = current;
+      }
+      previous = current;
+      operator = btn.dataset.op;
+      expression = current + ' ' + btn.textContent;
+      shouldReset = true;
+      updateDisplay();
+    }
+
+    if (action === 'equals') {
+      if (operator) {
+        expression = previous + ' ' + (operator==='*'?'×':operator==='/'?'÷':operator) + ' ' + current + ' =';
+        const result = calculate(previous, operator, current);
+        current = String(result);
+        operator = null;
+        previous = '';
+        shouldReset = true;
+        updateDisplay();
+      }
+    }
+
+    if (action === 'clear') {
+      current = '0';
+      previous = '';
+      operator = null;
+      shouldReset = false;
+      expression = '';
+      updateDisplay();
+    }
+
+    if (action === 'negate') {
+      current = String(-parseFloat(current));
+      updateDisplay();
+    }
+
+    if (action === 'percent') {
+      current = String(parseFloat(current) / 100);
+      updateDisplay();
+    }
+  });
+});
+
+// Keyboard support
+document.addEventListener('keydown', (e) => {
+  const key = e.key;
+  if (key >= '0' && key <= '9') {
+    if (shouldReset) { current = '0'; shouldReset = false; }
+    current = current === '0' ? key : current + key;
+    updateDisplay();
+  }
+  if (key === '.') {
+    if (shouldReset) { current = '0'; shouldReset = false; }
+    if (!current.includes('.')) current += '.';
+    updateDisplay();
+  }
+  if (key === '+' || key === '-' || key === '*' || key === '/') {
+    if (operator && !shouldReset) {
+      current = String(calculate(previous, operator, current));
+    }
+    previous = current;
+    operator = key;
+    expression = current + ' ' + (key==='*'?'×':key==='/'?'÷':key);
+    shouldReset = true;
+    updateDisplay();
+  }
+  if (key === 'Enter' || key === '=') {
+    if (operator) {
+      expression = previous + ' ' + (operator==='*'?'×':operator==='/'?'÷':operator) + ' ' + current + ' =';
+      current = String(calculate(previous, operator, current));
+      operator = null; previous = '';
+      shouldReset = true;
+      updateDisplay();
+    }
+  }
+  if (key === 'Escape') {
+    current = '0'; previous = ''; operator = null; shouldReset = false; expression = '';
+    updateDisplay();
+  }
+});
+
+window.parent.postMessage({ type: 'set-title', title: 'Calculator' }, '*');
+</script>
+</body>
+</html>

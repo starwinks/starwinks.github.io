@@ -1,0 +1,15 @@
+# macOS Browser Edition — Dock Configuration
+dock:
+  position: bottom        # bottom | left | right
+  auto_hide: false
+  magnification: false
+  items:
+    - app: finder
+    - app: terminal
+    - app: notes
+    - app: calculator
+    - app: settings
+    - separator
+    - app: textedit
+    - app: monitor
+    - app: browser

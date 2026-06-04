@@ -1,0 +1,101 @@
+# macOS Browser Edition — System Configuration
+system:
+  name: "macOS Browser Edition"
+  version: "15.0"
+  build: "24A335"
+  hostname: "MacBook-Pro"
+
+  # Desktop icons (app keys from apps.yaml)
+  desktop_icons:
+    - finder
+    - terminal
+    - notes
+    - calculator
+    - settings
+    - textedit
+    - monitor
+    - browser
+
+  wallpaper: default    # default | sunset | forest | night | ocean
+
+  # Menu bar structure
+  menus:
+    - id: finder
+      label: Finder
+      items:
+        - { label: "About This Mac", action: about }
+        - separator
+        - { label: "Settings...", shortcut: "⌘,", action: open_settings }
+        - separator
+        - { label: "Force Quit...", shortcut: "⌘⌥Esc", action: force_quit }
+        - separator
+        - { label: "Sleep", action: sleep }
+        - { label: "Restart...", action: restart }
+        - { label: "Shut Down...", action: shutdown }
+
+    - id: file
+      label: File
+      items:
+        - { label: "New Finder Window", shortcut: "⌘N", action: new_finder }
+        - { label: "New Folder", shortcut: "⌘⇧N", action: new_folder }
+        - separator
+        - { label: "Open", shortcut: "⌘O", action: open_file }
+        - { label: "Close Window", shortcut: "⌘W", action: close_window }
+        - separator
+        - { label: "Get Info", shortcut: "⌘I", action: get_info }
+
+    - id: edit
+      label: Edit
+      items:
+        - { label: "Undo", shortcut: "⌘Z", action: undo }
+        - { label: "Redo", shortcut: "⌘⇧Z", action: redo }
+        - separator
+        - { label: "Cut", shortcut: "⌘X", action: cut }
+        - { label: "Copy", shortcut: "⌘C", action: copy }
+        - { label: "Paste", shortcut: "⌘V", action: paste }
+        - { label: "Select All", shortcut: "⌘A", action: select_all }
+
+    - id: view
+      label: View
+      items:
+        - { label: "as Icons", shortcut: "⌘1", action: view_icons }
+        - { label: "as List", shortcut: "⌘2", action: view_list }
+        - { label: "as Columns", shortcut: "⌘3", action: view_columns }
+        - separator
+        - { label: "Show Path Bar", action: toggle_path_bar }
+        - { label: "Show Tab Bar", action: toggle_tab_bar }
+        - separator
+        - { label: "Enter Full Screen", shortcut: "⌃⌘F", action: fullscreen }
+
+    - id: go
+      label: Go
+      items:
+        - { label: "Back", shortcut: "⌘[", action: go_back }
+        - { label: "Forward", shortcut: "⌘]", action: go_forward }
+        - separator
+        - { label: "Desktop", action: go_desktop }
+        - { label: "Documents", action: go_documents }
+        - { label: "Downloads", action: go_downloads }
+        - { label: "Home", shortcut: "⌘⇧H", action: go_home }
+        - { label: "Computer", shortcut: "⌘⇧C", action: go_computer }
+        - separator
+        - { label: "Go to Folder...", shortcut: "⌘⇧G", action: go_to_folder }
+
+    - id: window
+      label: Window
+      items:
+        - { label: "Minimize", shortcut: "⌘M", action: minimize }
+        - { label: "Zoom", action: zoom }
+        - separator
+        - { label: "Show Previous Tab", shortcut: "⌃⇧⇥", action: prev_window }
+        - { label: "Show Next Tab", shortcut: "⌃⇥", action: next_window }
+        - separator
+        - { label: "Bring All to Front", action: bring_all_front }
+
+    - id: help
+      label: Help
+      items:
+        - { label: "macOS Help", action: help }
+        - separator
+        - { label: "Keyboard Shortcuts", action: shortcuts }
+        - { label: "About This Simulation", action: about }

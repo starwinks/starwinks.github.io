@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/app-common.css">
+<style>
+  .finder-layout { display: flex; height: 100%; flex-direction: column; }
+  .finder-body { display: flex; flex: 1; overflow: hidden; }
+  .finder-sidebar { width: 170px; }
+  .sidebar-section { padding: 8px 6px 2px; font-size: 10px; color: var(--app-text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .finder-main { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; }
+  .file-item {
+    width: 80px; padding: 8px 4px; border-radius: 6px; cursor: default;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    font-size: 11px; transition: background 0.1s;
+  }
+  .file-item:hover { background: rgba(255,255,255,0.08); }
+  .file-item:active { background: rgba(255,255,255,0.15); }
+  .file-item.selected { background: var(--app-accent); }
+  .file-icon { font-size: 36px; line-height: 1; margin-bottom: 3px; }
+  .file-name { word-break: break-word; max-width: 100%; line-height: 1.3; }
+  .nav-btns { display: flex; gap: 4px; }
+  .nav-btn {
+    width: 26px; height: 22px; border-radius: 4px; border: none;
+    background: transparent; color: var(--app-text); font-size: 14px;
+    cursor: default; display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: var(--app-hover); }
+  .nav-btn:active { background: var(--app-active); }
+  .path-bar {
+    flex: 1; font-size: 11px; color: var(--app-text-secondary);
+    padding: 0 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .preview-panel {
+    width: 200px; border-left: 0.5px solid var(--app-border);
+    padding: 16px; display: flex; flex-direction: column; align-items: center;
+    gap: 8px; font-size: 11px; flex-shrink: 0;
+  }
+  .preview-icon { font-size: 64px; }
+  .preview-name { font-weight: 600; }
+  .preview-info { color: var(--app-text-secondary); font-size: 10px; text-align: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="finder-layout">
+  <div class="app-toolbar">
+    <div class="nav-btns">
+      <button class="nav-btn" id="btn-back" title="Back">◀</button>
+      <button class="nav-btn" id="btn-fwd" title="Forward">▶</button>
+    </div>
+    <span class="path-bar" id="path-bar">/Macintosh HD/Users/starwink</span>
+    <button class="toolbar-btn active" id="btn-icon-view" title="Icon View">▦</button>
+    <button class="toolbar-btn" id="btn-list-view" title="List View">☰</button>
+  </div>
+  <div class="finder-body">
+    <div class="app-sidebar finder-sidebar">
+      <div class="sidebar-section">Favorites</div>
+      <div class="sidebar-item active" data-path="/Users/starwink"><span class="si-icon">🏠</span> Home</div>
+      <div class="sidebar-item" data-path="/Users/starwink/Desktop"><span class="si-icon">🖥</span> Desktop</div>
+      <div class="sidebar-item" data-path="/Users/starwink/Documents"><span class="si-icon">📁</span> Documents</div>
+      <div class="sidebar-item" data-path="/Users/starwink/Downloads"><span class="si-icon">📥</span> Downloads</div>
+      <div class="sidebar-item" data-path="/Users/starwink/Pictures"><span class="si-icon">🖼</span> Pictures</div>
+      <div class="sidebar-item" data-path="/Users/starwink/Music"><span class="si-icon">🎵</span> Music</div>
+      <div class="sidebar-item" data-path="/Users/starwink/Movies"><span class="si-icon">🎬</span> Movies</div>
+      <div class="sidebar-section" style="margin-top:8px;">Locations</div>
+      <div class="sidebar-item" data-path="/"><span class="si-icon">💾</span> Macintosh HD</div>
+      <div class="sidebar-item" data-path="/Applications"><span class="si-icon">📦</span> Applications</div>
+    </div>
+    <div class="finder-main" id="finder-files"></div>
+    <div class="preview-panel" id="preview-panel">
+      <div class="preview-icon">📁</div>
+      <div class="preview-name">Home</div>
+      <div class="preview-info">Folder — <span id="preview-count">0</span> items</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const kernel = window.parent.kernel;
+const DB = window.parent.dbManager;     // legacy fallback
+const fs = kernel ? kernel.get('fs') : null;
+const pathBar = document.getElementById('path-bar');
+const filesContainer = document.getElementById('finder-files');
+const previewPanel = document.getElementById('preview-panel');
+
+let currentPath = '/Users/starwink';
+let selectedFile = null;
+const navStack = [];
+let navIdx = -1;
+
+function renderFiles() {
+  filesContainer.innerHTML = '';
+  if (!DB) return;
+
+  const entries = (fs||DB).list(currentPath);
+
+  entries.forEach(file => {
+    const el = document.createElement('div');
+    el.className = 'file-item';
+    el.innerHTML = `<div class="file-icon">${file.icon || (file.type === 'folder' ? '📁' : '📄')}</div><div class="file-name">${file.name}</div>`;
+
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.file-item.selected').forEach(f => f.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedFile = file;
+      updatePreview(file);
+    });
+
+    el.addEventListener('dblclick', () => {
+      if (file.type === 'folder') {
+        navigateTo(currentPath === '/' ? `/${file.name}` : `${currentPath}/${file.name}`);
+      } else {
+        const ext = file.name.split('.').pop();
+        window.parent.postMessage({ type: 'notify', body: `Opening "${file.name}" with ${ext === 'txt'||ext === 'md' ? 'TextEdit' : 'Preview'}...` }, '*');
+      }
+    });
+
+    filesContainer.appendChild(el);
+  });
+
+  updatePathBar();
+  document.getElementById('preview-count').textContent = entries.length;
+}
+
+function updatePreview(file) {
+  if (!file) {
+    previewPanel.innerHTML = '<div class="preview-icon">📁</div><div class="preview-name">No Selection</div><div class="preview-info">Select a file to preview</div>';
+    return;
+  }
+  const size = file.type === 'folder' ? '--' : (Math.floor(Math.random() * 500 + 10) + ' KB');
+  previewPanel.innerHTML = `
+    <div class="preview-icon">${file.icon || (file.type === 'folder' ? '📁' : '📄')}</div>
+    <div class="preview-name">${file.name}</div>
+    <div class="preview-info">${file.type === 'folder' ? 'Folder' : file.name.split('.').pop().toUpperCase() + ' File'}<br>Size: ${size}</div>
+  `;
+}
+
+function navigateTo(path) {
+  // Verify path exists and is a folder
+  if (path !== '/' && path !== '') {
+    let entry;
+    if (fs) {
+      entry = fs.getEntry(path);
+    } else if (DB) {
+      const parent = path.substring(0, path.lastIndexOf('/')) || '/';
+      const name = path.split('/').pop();
+      entry = DB.getFileEntry(parent, name);
+    }
+    if (!entry || entry.type !== 'folder') {
+      window.parent.postMessage({ type: 'notification:show', body: `Cannot open: ${path}` }, '*');
+      return;
+    }
+  }
+
+  if (navIdx < navStack.length - 1) navStack.length = navIdx + 1;
+  navStack.push(path);
+  navIdx = navStack.length - 1;
+  currentPath = path;
+  selectedFile = null;
+  renderFiles();
+  updateSidebarActive();
+}
+
+function updatePathBar() {
+  const display = currentPath === '/' ? 'Macintosh HD' : currentPath.replace(/^\//, 'Macintosh HD/');
+  pathBar.textContent = display;
+}
+
+function updateSidebarActive() {
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.path === currentPath);
+  });
+}
+
+// Sidebar clicks
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', () => navigateTo(item.dataset.path));
+});
+
+// Nav
+document.getElementById('btn-back').addEventListener('click', () => {
+  if (navIdx > 0) { navIdx--; currentPath = navStack[navIdx]; selectedFile = null; renderFiles(); updateSidebarActive(); }
+});
+document.getElementById('btn-fwd').addEventListener('click', () => {
+  if (navIdx < navStack.length - 1) { navIdx++; currentPath = navStack[navIdx]; selectedFile = null; renderFiles(); updateSidebarActive(); }
+});
+
+// View toggle
+let isListView = false;
+document.getElementById('btn-icon-view').addEventListener('click', function() {
+  this.classList.add('active'); document.getElementById('btn-list-view').classList.remove('active');
+  isListView = false; filesContainer.style.display = 'flex'; filesContainer.style.flexWrap = 'wrap'; renderFiles();
+});
+document.getElementById('btn-list-view').addEventListener('click', function() {
+  this.classList.add('active'); document.getElementById('btn-icon-view').classList.remove('active');
+  isListView = true; filesContainer.style.display = 'block'; filesContainer.style.flexWrap = 'nowrap'; renderFilesAsList();
+});
+
+function renderFilesAsList() {
+  filesContainer.innerHTML = '';
+  if (!DB) return;
+  const entries = (fs||DB).list(currentPath);
+  entries.forEach(file => {
+    const el = document.createElement('div');
+    el.className = 'list-item';
+    el.innerHTML = `<span>${file.icon || (file.type==='folder'?'📁':'📄')}</span><span>${file.name}</span><span style="margin-left:auto;color:var(--app-text-secondary);font-size:10px;">${file.type==='folder'?'Folder':'File'}</span>`;
+    el.addEventListener('dblclick', () => {
+      if (file.type === 'folder') navigateTo(currentPath === '/' ? `/${file.name}` : `${currentPath}/${file.name}`);
+    });
+    filesContainer.appendChild(el);
+  });
+}
+
+// Init
+navStack.push(currentPath); navIdx = 0;
+renderFiles();
+window.parent.postMessage({ type: 'set-title', title: 'Finder' }, '*');
+</script>
+</body>
+</html>

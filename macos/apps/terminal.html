@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/app-common.css">
+<style>
+  body { background: rgba(20,20,22,0.97); }
+  #terminal {
+    height: 100%; padding: 12px; overflow-y: auto;
+    font-family: 'SF Mono','Menlo','Monaco','Courier New',monospace;
+    font-size: 13px; line-height: 1.5; color: #0f0;
+    white-space: pre-wrap; word-break: break-all;
+  }
+  #terminal .line { display: flex; }
+  #terminal .prompt { color: #0f0; margin-right: 8px; white-space: nowrap; }
+  #terminal .output { color: #ccc; white-space: pre-wrap; }
+  #terminal .output.error { color: #ff5f57; }
+  #terminal .output.info { color: #5e9eff; }
+  #terminal .output.success { color: #28c840; }
+  #input-line { display: flex; align-items: center; }
+  #term-input {
+    flex: 1; background: transparent; border: none; color: #0f0;
+    font-family: inherit; font-size: inherit; outline: none; caret-color: #0f0;
+  }
+</style>
+</head>
+<body>
+<div id="terminal"></div>
+
+<script>
+const kernel = window.parent.kernel;
+const shell = kernel ? kernel.get('shell') : null;
+const term = document.getElementById('terminal');
+let histIdx = -1;
+
+// ---- TTY implementation ----
+const tty = {
+  writeLine(text, cls) {
+    const line = document.createElement('div');
+    line.className = 'line';
+    if (cls) {
+      const span = document.createElement('span');
+      span.className = `output ${cls}`;
+      span.textContent = text;
+      line.appendChild(span);
+    } else {
+      const span = document.createElement('span');
+      span.className = 'output';
+      span.textContent = text;
+      line.appendChild(span);
+    }
+    term.appendChild(line);
+    term.scrollTop = term.scrollHeight;
+  },
+
+  write(text, cls) {
+    // Handle multi-line output
+    if (text) {
+      const lines = text.split('\n');
+      for (const l of lines) this.writeLine(l, cls);
+    }
+  },
+
+  clear() {
+    term.innerHTML = '';
+  },
+};
+
+// ---- Ensure text is safe ----
+function esc(s) { return s || ''; }
+
+// ---- Prompt ----
+function newPrompt() {
+  const old = document.getElementById('input-line');
+  if (old) old.remove();
+
+  if (!shell) {
+    const line = document.createElement('div');
+    line.className = 'line';
+    line.innerHTML = '<span class="output error">Shell engine not available. Is kernel loaded?</span>';
+    term.appendChild(line);
+    return;
+  }
+
+  const env = shell.env;
+  const user = env.get('USER');
+  const host = env.get('HOSTNAME');
+  const cwd = env.cwd;
+  const displayPath = cwd === '/' ? '/' : cwd.replace(/^\/Users\/starwink/, '~');
+
+  const line = document.createElement('div');
+  line.id = 'input-line';
+  line.innerHTML = `<span class="prompt">${user}@${host} ${displayPath} $ </span>`;
+  const input = document.createElement('input');
+  input.id = 'term-input';
+  input.type = 'text';
+  input.autofocus = true;
+  input.spellcheck = false;
+  input.autocomplete = 'off';
+  line.appendChild(input);
+  term.appendChild(line);
+  input.focus();
+  term.scrollTop = term.scrollHeight;
+
+  input.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter') {
+      const cmd = input.value.trim();
+      input.disabled = true;
+      line.removeChild(input);
+      const promptSpan = line.querySelector('.prompt');
+      if (promptSpan) promptSpan.textContent += cmd;
+
+      if (cmd) {
+        // Execute via shell engine
+        const result = await shell.execute(cmd, tty);
+        // Output result (shell may have already written to tty via ctx.tty)
+        if (result.stdout && !cmd.startsWith('clear')) {
+          tty.write(result.stdout);
+        }
+        if (result.stderr) {
+          tty.write(result.stderr, 'error');
+        }
+        histIdx = shell.history.length;
+      }
+      newPrompt();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const h = shell.history;
+      if (histIdx > 0) { histIdx--; input.value = h[histIdx]; }
+      else if (h.length > 0 && histIdx === -1) { histIdx = h.length - 1; input.value = h[histIdx]; }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const h = shell.history;
+      if (histIdx < h.length - 1) { histIdx++; input.value = h[histIdx]; }
+      else { histIdx = h.length; input.value = ''; }
+    } else if ((e.metaKey || e.ctrlKey) && e.key === 'c') {
+      input.value = '';
+      tty.writeLine('^C');
+      newPrompt();
+    }
+  });
+}
+
+// ---- Init ----
+tty.writeLine('macOS Terminal — Shell Engine v1.0', 'info');
+tty.writeLine(`${shell ? shell.registry.count() : 0} commands loaded. Type "help" for a list.\n`, 'info');
+newPrompt();
+
+term.addEventListener('click', () => {
+  const inp = document.getElementById('term-input');
+  if (inp) inp.focus();
+});
+
+window.parent.postMessage({ type: 'window:set-title', title: `Terminal — starwink — zsh — 80×24` }, '*');
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/app-common.css">
+<style>
+  .notes-layout { display: flex; height: 100%; }
+  .notes-sidebar {
+    width: 200px; border-right: 0.5px solid var(--app-border);
+    display: flex; flex-direction: column;
+  }
+  .notes-sidebar-header {
+    padding: 10px 12px; border-bottom: 0.5px solid var(--app-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .notes-sidebar-header h3 { font-size: 13px; font-weight: 600; }
+  .notes-list { flex: 1; overflow-y: auto; }
+  .note-item {
+    padding: 10px 12px; border-bottom: 0.5px solid rgba(255,255,255,0.04);
+    cursor: default;
+  }
+  .note-item:hover { background: var(--app-hover); }
+  .note-item.active { background: var(--app-accent); color: #fff; }
+  .note-item .note-title { font-size: 12px; font-weight: 500; margin-bottom: 2px; }
+  .note-item .note-preview {
+    font-size: 10px; color: var(--app-text-secondary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .note-item.active .note-preview { color: rgba(255,255,255,0.6); }
+  .note-item .note-date { font-size: 9px; color: var(--app-text-secondary); margin-top: 3px; }
+  .note-item.active .note-date { color: rgba(255,255,255,0.5); }
+  .notes-editor { flex: 1; display: flex; flex-direction: column; }
+  .notes-editor-header {
+    padding: 6px 12px; border-bottom: 0.5px solid var(--app-border);
+    display: flex; align-items: center; gap: 6px;
+  }
+  #note-title-input {
+    flex: 1; background: transparent; border: none; color: var(--app-text);
+    font-size: 16px; font-weight: 600; font-family: var(--app-font); outline: none;
+  }
+  #note-title-input::placeholder { color: var(--app-text-secondary); }
+  .icon-btn {
+    width: 26px; height: 26px; border-radius: 5px; border: none;
+    background: transparent; color: var(--app-text-secondary); font-size: 14px;
+    cursor: default; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { background: var(--app-hover); color: var(--app-text); }
+  .icon-btn.primary { background: var(--app-accent); color: #fff; }
+  .icon-btn.primary:hover { background: var(--app-accent-hover); }
+  #note-body {
+    flex: 1; padding: 14px; background: transparent; border: none;
+    color: var(--app-text); font-size: 13px; font-family: var(--app-font);
+    outline: none; resize: none; line-height: 1.65;
+  }
+  #note-body::placeholder { color: var(--app-text-secondary); }
+  .toolbar-sep { width: 1px; height: 18px; background: var(--app-border); margin: 0 4px; }
+</style>
+</head>
+<body>
+<div class="notes-layout">
+  <div class="notes-sidebar">
+    <div class="notes-sidebar-header">
+      <h3>Notes</h3>
+      <button class="icon-btn primary" id="btn-new-note" title="New Note">+</button>
+    </div>
+    <div class="notes-list" id="notes-list"></div>
+  </div>
+  <div class="notes-editor">
+    <div class="notes-editor-header">
+      <input type="text" id="note-title-input" placeholder="Note Title">
+      <button class="icon-btn" id="btn-export-md" title="Export as Markdown">⬇</button>
+      <button class="icon-btn" id="btn-import-md" title="Import Markdown file">⬆</button>
+      <span class="toolbar-sep"></span>
+      <button class="icon-btn" id="btn-delete" title="Delete Note" style="color:#ff5f57;">🗑</button>
+    </div>
+    <textarea id="note-body" placeholder="Start writing..."></textarea>
+  </div>
+</div>
+
+<script>
+// Access DB and utils from parent window
+const DB = window.parent.dbManager;
+const MD = window.parent.markdownUtils;
+
+let notes = [];
+let activeNoteId = null;
+let isDirty = false;
+
+function loadNotes() {
+  if (!DB) return;
+  notes = DB.getNotes();
+  if (notes.length === 0) {
+    const note = DB.createNote('Welcome to Notes',
+      'This is your first note. It is stored in an SQLite database (sql.js) and persisted automatically.\n\n' +
+      '**New**: Export notes as Markdown (.md) files, or import .md files.\n\n📝 Happy writing!');
+    notes = [note];
+  }
+  if (!activeNoteId || !notes.find(n => n.id === activeNoteId)) {
+    activeNoteId = notes[0]?.id || null;
+  }
+}
+
+function renderNoteList() {
+  const list = document.getElementById('notes-list');
+  list.innerHTML = '';
+  notes.forEach(note => {
+    const el = document.createElement('div');
+    el.className = 'note-item' + (note.id === activeNoteId ? ' active' : '');
+    const preview = (note.body || '').replace(/\n/g, ' ').substring(0, 50) + ((note.body || '').length > 50 ? '...' : '');
+    const date = new Date(note.updated_at);
+    const ds = date.toLocaleDateString('en', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    el.innerHTML = `<div class="note-title">${note.title || 'Untitled'}</div><div class="note-preview">${preview || 'No content'}</div><div class="note-date">${ds}</div>`;
+    el.addEventListener('click', () => selectNote(note.id));
+    list.appendChild(el);
+  });
+}
+
+function selectNote(id) {
+  saveCurrentNote();
+  activeNoteId = id;
+  const note = notes.find(n => n.id === id);
+  if (note) {
+    document.getElementById('note-title-input').value = note.title;
+    document.getElementById('note-body').value = note.body;
+  }
+  renderNoteList();
+}
+
+function saveCurrentNote() {
+  if (activeNoteId === null || !isDirty) return;
+  const title = document.getElementById('note-title-input').value || 'Untitled';
+  const body = document.getElementById('note-body').value;
+  DB.updateNote(activeNoteId, title, body);
+  notes = DB.getNotes();
+  isDirty = false;
+}
+
+function createNote() {
+  saveCurrentNote();
+  const note = DB.createNote('New Note', '');
+  notes = DB.getNotes();
+  activeNoteId = note.id;
+  document.getElementById('note-title-input').value = note.title;
+  document.getElementById('note-body').value = '';
+  renderNoteList();
+  document.getElementById('note-title-input').focus();
+  isDirty = false;
+}
+
+function deleteNote() {
+  if (activeNoteId === null || notes.length <= 1) {
+    window.parent.postMessage({ type: 'notify', body: 'Cannot delete the last note' }, '*');
+    return;
+  }
+  DB.deleteNote(activeNoteId);
+  notes = DB.getNotes();
+  activeNoteId = notes[0]?.id || null;
+  if (activeNoteId) {
+    const note = notes[0];
+    document.getElementById('note-title-input').value = note.title;
+    document.getElementById('note-body').value = note.body;
+  }
+  renderNoteList();
+  isDirty = false;
+}
+
+// ---- Export / Import ----
+function exportMarkdown() {
+  if (activeNoteId === null) return;
+  const note = notes.find(n => n.id === activeNoteId);
+  if (!note) return;
+  const md = MD.noteToMarkdown(note);
+  MD.downloadMd(md, note.title || 'note');
+}
+
+async function importMarkdown() {
+  const result = await MD.importMd();
+  if (!result) return;
+  const note = DB.importNoteMarkdown(result.content);
+  notes = DB.getNotes();
+  activeNoteId = note.id;
+  document.getElementById('note-title-input').value = note.title;
+  document.getElementById('note-body').value = note.body;
+  renderNoteList();
+  isDirty = false;
+  window.parent.postMessage({ type: 'notify', body: `Imported: ${result.name}` }, '*');
+}
+
+// ---- Event binding ----
+document.getElementById('btn-new-note').addEventListener('click', createNote);
+document.getElementById('btn-delete').addEventListener('click', deleteNote);
+document.getElementById('btn-export-md').addEventListener('click', exportMarkdown);
+document.getElementById('btn-import-md').addEventListener('click', importMarkdown);
+
+// Auto-save on input
+let saveTimer;
+document.getElementById('note-title-input').addEventListener('input', () => {
+  isDirty = true;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveCurrentNote, 600);
+});
+document.getElementById('note-body').addEventListener('input', () => {
+  isDirty = true;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { saveCurrentNote(); renderNoteList(); }, 600);
+});
+
+// ---- Init ----
+loadNotes();
+if (activeNoteId) {
+  const note = notes.find(n => n.id === activeNoteId);
+  if (note) {
+    document.getElementById('note-title-input').value = note.title;
+    document.getElementById('note-body').value = note.body;
+  }
+}
+renderNoteList();
+window.parent.postMessage({ type: 'set-title', title: 'Notes' }, '*');
+</script>
+</body>
+</html>

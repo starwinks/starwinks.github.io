@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>macOS — Browser Edition</title>
+<link rel="stylesheet" href="css/desktop.css">
+</head>
+<body>
+
+<!-- Menu Bar -->
+<div id="menubar">
+  <div id="menubar-left">
+    <span class="menu-apple" title="Apple Menu"></span>
+    <!-- menu items rendered by config -->
+  </div>
+  <div id="menubar-right">
+    <span class="menu-icon" id="icon-battery" title="Battery">🔋 100%</span>
+    <span class="menu-icon" id="icon-wifi" title="Wi-Fi">📶</span>
+    <span class="menu-icon" id="icon-bluetooth" title="Bluetooth">BT</span>
+    <span class="menu-icon" id="icon-volume" title="Volume">🔊</span>
+    <span id="menubar-clock"></span>
+  </div>
+</div>
+
+<!-- Dropdown Menu -->
+<div id="context-menu" class="context-menu hidden"></div>
+
+<!-- Desktop Area (icons rendered by config) -->
+<div id="desktop"></div>
+
+<!-- Dock (items rendered by config) -->
+<div id="dock-container">
+  <div id="dock"></div>
+</div>
+
+<!-- Windows Container -->
+<div id="windows-container"></div>
+
+<!-- App Switcher (Cmd+Tab) -->
+<div id="app-switcher"></div>
+
+<!-- CDN Dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+
+<!-- Core -->
+<script src="js/event-bus.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/kernel.js"></script>
+
+<!-- Services -->
+<script src="js/services/window-manager.js"></script>
+<script src="js/services/dock-service.js"></script>
+<script src="js/services/menubar-service.js"></script>
+<script src="js/services/desktop-service.js"></script>
+<script src="js/services/notification-service.js"></script>
+<script src="js/services/clipboard-service.js"></script>
+<script src="js/services/config-service.js"></script>
+<script src="js/services/settings-service.js"></script>
+
+<!-- Process & IPC -->
+<script src="js/process/process-manager.js"></script>
+<script src="js/ipc.js"></script>
+
+<!-- File System -->
+<script src="js/fs/filesystem.js"></script>
+
+<!-- Shell System -->
+<script src="js/shell/environment.js"></script>
+<script src="js/shell/parser.js"></script>
+<script src="js/shell/command-registry.js"></script>
+<script src="js/shell/executor.js"></script>
+<script src="js/shell/shell.js"></script>
+<script src="js/shell/commands/fs-cmds.js"></script>
+<script src="js/shell/commands/sys-cmds.js"></script>
+<script src="js/shell/commands/util-cmds.js"></script>
+<script src="js/shell/commands/proc-cmds.js"></script>
+<script src="js/shell/commands/ext-cmds.js"></script>
+<script src="js/shell/commands/index.js"></script>
+
+<!-- Utilities & Bootstrap -->
+<script src="js/utils/dom.js"></script>
+<script src="js/markdown.js"></script>
+<script src="js/desktop.js"></script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/app-common.css">
+<style>
+  .browser-layout { display: flex; flex-direction: column; height: 100%; }
+  .browser-toolbar {
+    display: flex; align-items: center; gap: 6px; padding: 6px 10px;
+    border-bottom: 0.5px solid var(--app-border); flex-shrink: 0;
+  }
+  .nav-btn {
+    width: 28px; height: 24px; border-radius: 4px; border: none;
+    background: transparent; color: var(--app-text); font-size: 14px;
+    cursor: default; display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: var(--app-hover); }
+  .nav-btn:active { background: var(--app-active); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .url-bar {
+    flex: 1; display: flex; align-items: center;
+    background: var(--app-input-bg); border-radius: 6px;
+    border: 0.5px solid var(--app-border); padding: 4px 10px;
+  }
+  .url-bar .lock { margin-right: 6px; font-size: 11px; }
+  #url-input {
+    flex: 1; background: transparent; border: none; color: var(--app-text);
+    font-size: 12px; font-family: var(--app-font); outline: none;
+  }
+  .browser-content {
+    flex: 1; overflow-y: auto; background: #fff; color: #1a1a1a;
+  }
+  .webpage { padding: 24px 32px; max-width: 800px; margin: 0 auto; line-height: 1.7; }
+  .webpage h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .webpage h2 { font-size: 20px; font-weight: 600; margin: 24px 0 10px; }
+  .webpage h3 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
+  .webpage p { margin-bottom: 12px; font-size: 14px; }
+  .webpage a { color: #0a84ff; text-decoration: none; }
+  .webpage a:hover { text-decoration: underline; }
+  .webpage ul { margin: 8px 0 8px 20px; }
+  .webpage li { margin-bottom: 4px; font-size: 14px; }
+  .webpage .card {
+    background: #f5f5f7; border-radius: 12px; padding: 16px 20px;
+    margin: 12px 0;
+  }
+  .bookmarks-bar {
+    display: flex; gap: 4px; padding: 4px 10px; font-size: 11px;
+    border-bottom: 0.5px solid var(--app-border); flex-shrink: 0;
+    align-items: center;
+  }
+  .bookmark-item {
+    padding: 3px 10px; border-radius: 4px; cursor: default; color: var(--app-text);
+  }
+  .bookmark-item:hover { background: var(--app-hover); }
+  .tabs-bar {
+    display: flex; border-bottom: 0.5px solid var(--app-border); flex-shrink: 0;
+    background: rgba(30,30,32,0.4);
+  }
+  .browser-tab {
+    padding: 6px 14px; font-size: 11px; cursor: default; color: var(--app-text-secondary);
+    border-right: 0.5px solid var(--app-border); display: flex; align-items: center; gap: 6px;
+    max-width: 180px;
+  }
+  .browser-tab.active { background: var(--app-bg); color: var(--app-text); }
+  .browser-tab:hover { background: var(--app-hover); }
+  .browser-tab .tab-close { font-size: 10px; opacity: 0; }
+  .browser-tab:hover .tab-close { opacity: 0.6; }
+  .browser-tab .tab-close:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="browser-layout">
+  <div class="tabs-bar" id="tabs-bar">
+    <div class="browser-tab active" data-tab="0">
+      <span>🏠</span><span>Home</span><span class="tab-close">✕</span>
+    </div>
+    <div style="padding:6px 8px;cursor:default;color:var(--app-text-secondary);font-size:14px;" id="btn-new-tab" title="New Tab">+</div>
+  </div>
+  <div class="browser-toolbar">
+    <button class="nav-btn" id="btn-back" disabled title="Back">◀</button>
+    <button class="nav-btn" id="btn-fwd" disabled title="Forward">▶</button>
+    <button class="nav-btn" id="btn-refresh" title="Refresh">↻</button>
+    <div class="url-bar">
+      <span class="lock">🔒</span>
+      <input type="text" id="url-input" value="https://www.apple.com" placeholder="Search or enter website name">
+    </div>
+  </div>
+  <div class="bookmarks-bar">
+    <span style="color:var(--app-text-secondary);margin-right:4px;">Bookmarks:</span>
+    <span class="bookmark-item" data-url="apple">🍎 Apple</span>
+    <span class="bookmark-item" data-url="github">🐙 GitHub</span>
+    <span class="bookmark-item" data-url="wiki">📚 Wikipedia</span>
+    <span class="bookmark-item" data-url="news">📰 News</span>
+    <span class="bookmark-item" data-url="search">🔍 Search</span>
+  </div>
+  <div class="browser-content" id="browser-content"></div>
+</div>
+
+<script>
+let activeTab = 0;
+let tabCount = 1;
+const tabHistory = { 0: { url: 'apple', back: [], fwd: [] } };
+
+const pages = {
+  apple: {
+    title: 'Apple',
+    url: 'https://www.apple.com',
+    content: `
+      <div class="webpage">
+        <h1>🍎 Apple</h1>
+        <p style="font-size:18px;color:#666;">Think different.</p>
+        <div class="card">
+          <h3>Latest Products</h3>
+          <ul>
+            <li><strong>iPhone 18 Pro</strong> — Powered by A20 Pro chip. The most powerful iPhone ever.</li>
+            <li><strong>MacBook Pro</strong> — M5 Pro and M5 Max chips. Up to 18-core GPU.</li>
+            <li><strong>iPad Pro</strong> — With M5 chip and Liquid Retina XDR display.</li>
+            <li><strong>Apple Vision Pro 2</strong> — Spatial computing redefined.</li>
+          </ul>
+        </div>
+        <h2>macOS 15 Sonoma</h2>
+        <p>The latest version of macOS brings powerful new features for creativity, productivity, and gaming. With interactive widgets, stunning screen savers, and enhanced video conferencing capabilities.</p>
+        <h2>News</h2>
+        <p>WWDC 2026 announced — Join us June 9–13 for an incredible week of technology and innovation. <a href="#">Learn more →</a></p>
+      </div>
+    `
+  },
+  github: {
+    title: 'GitHub',
+    url: 'https://github.com',
+    content: `
+      <div class="webpage">
+        <h1>🐙 GitHub</h1>
+        <p style="font-size:18px;color:#666;">Let's build from here.</p>
+        <div class="card">
+          <h3>Trending Repositories</h3>
+          <ul>
+            <li><strong>ml-explore/mlx</strong> — MLX: An array framework for Apple silicon ⭐ 18.2k</li>
+            <li><strong>anthropics/claude-code</strong> — Claude Code is an agentic coding tool ⭐ 42.1k</li>
+            <li><strong>vercel/ai-chatbot</strong> — A full-featured AI chatbot template ⭐ 8.3k</li>
+          </ul>
+        </div>
+        <h2>Your Repositories</h2>
+        <ul>
+          <li><strong>starwink/dl-models</strong> — Deep learning model implementations</li>
+          <li><strong>starwink/dotfiles</strong> — Configuration files for dev environment</li>
+          <li><strong>starwink/macos-web</strong> — macOS simulation in the browser</li>
+        </ul>
+        <h2>Latest Activity</h2>
+        <p>You pushed to <strong>starwink/dl-models</strong> 2 hours ago — <em>"Add transformer implementation"</em></p>
+      </div>
+    `
+  },
+  wiki: {
+    title: 'Wikipedia',
+    url: 'https://en.wikipedia.org',
+    content: `
+      <div class="webpage">
+        <h1>📚 Wikipedia</h1>
+        <p style="font-size:18px;color:#666;">The Free Encyclopedia</p>
+        <h2>Today's Featured Article</h2>
+        <h3>macOS</h3>
+        <p><strong>macOS</strong> is a Unix-based operating system developed and marketed by Apple Inc. It is the primary operating system for Apple's Mac computers. Within the market of desktop and laptop computers, it is the second most widely used desktop OS, after Microsoft Windows.</p>
+        <p>The first version, Mac OS X 10.0, was released in March 2001. Notable releases include Mac OS X 10.4 Tiger (2005), which introduced Spotlight, and Mac OS X 10.6 Snow Leopard (2009), which introduced the Mac App Store.</p>
+        <p>In 2020, Apple began transitioning Macs to Apple silicon, custom ARM-based processors. The current version is macOS 15 Sonoma.</p>
+        <h2>In the News</h2>
+        <ul>
+          <li>Apple announces M5 chip family at WWDC 2025</li>
+          <li>Deep learning researchers achieve new benchmark results</li>
+          <li>JavaScript turns 30: a look back at the web's programming language</li>
+        </ul>
+      </div>
+    `
+  },
+  news: {
+    title: 'Tech News',
+    url: 'https://news.ycombinator.com',
+    content: `
+      <div class="webpage">
+        <h1>📰 Hacker News — Simulated</h1>
+        <div class="card">
+          <h3>Top Stories</h3>
+          <ol style="margin-left:20px;">
+            <li style="margin-bottom:8px;"><strong>Apple unveils M5 Pro with 18-core GPU</strong> <span style="color:#888;">(apple.com)</span><br><small>342 points by techwatcher 3 hours ago | 156 comments</small></li>
+            <li style="margin-bottom:8px;"><strong>DeepSeek V4: Open-source LLM matches GPT-5 on benchmarks</strong> <span style="color:#888;">(deepseek.com)</span><br><small>892 points by airesearcher 6 hours ago | 234 comments</small></li>
+            <li style="margin-bottom:8px;"><strong>Building a macOS clone in the browser</strong> <span style="color:#888;">(github.com/starwink)</span><br><small>124 points by starwink 1 hour ago | 42 comments</small></li>
+            <li style="margin-bottom:8px;"><strong>Rust 2026 edition released</strong> <span style="color:#888;">(rust-lang.org)</span><br><small>567 points by rustacean 8 hours ago | 189 comments</small></li>
+            <li style="margin-bottom:8px;"><strong>New CSS features landing in browsers this year</strong> <span style="color:#888;">(web.dev)</span><br><small>231 points by cssdev 5 hours ago | 67 comments</small></li>
+          </ol>
+        </div>
+      </div>
+    `
+  },
+  search: {
+    title: 'Search',
+    url: 'https://www.google.com',
+    content: `
+      <div class="webpage" style="text-align:center;padding-top:60px;">
+        <h1 style="font-size:48px;font-weight:400;">🔍</h1>
+        <div style="margin:20px auto;max-width:500px;">
+          <input type="text" placeholder="Search the web..." style="width:100%;padding:12px 16px;border-radius:24px;border:1px solid #ddd;font-size:16px;outline:none;box-shadow:0 2px 8px rgba(0,0,0,0.08);" onkeydown="if(event.key==='Enter')this.value&&navigateTo('news')">
+        </div>
+        <p style="color:#888;margin-top:16px;">This is a simulated browser — search queries will redirect to the news page.</p>
+      </div>
+    `
+  }
+};
+
+function navigateTo(pageKey) {
+  const page = pages[pageKey];
+  if (!page) return;
+  tabHistory[activeTab].back.push(tabHistory[activeTab].url);
+  tabHistory[activeTab].url = pageKey;
+  tabHistory[activeTab].fwd = [];
+  renderPage();
+}
+
+function renderPage() {
+  const hist = tabHistory[activeTab];
+  const page = pages[hist.url] || pages.apple;
+  document.getElementById('browser-content').innerHTML = page.content;
+  document.getElementById('url-input').value = page.url;
+  document.getElementById('btn-back').disabled = hist.back.length === 0;
+  document.getElementById('btn-fwd').disabled = hist.fwd.length === 0;
+}
+
+// Navigation buttons
+document.getElementById('btn-back').addEventListener('click', () => {
+  const hist = tabHistory[activeTab];
+  if (hist.back.length === 0) return;
+  hist.fwd.push(hist.url);
+  hist.url = hist.back.pop();
+  renderPage();
+});
+
+document.getElementById('btn-fwd').addEventListener('click', () => {
+  const hist = tabHistory[activeTab];
+  if (hist.fwd.length === 0) return;
+  hist.back.push(hist.url);
+  hist.url = hist.fwd.pop();
+  renderPage();
+});
+
+document.getElementById('btn-refresh').addEventListener('click', () => {
+  renderPage();
+});
+
+// URL bar
+document.getElementById('url-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const val = e.target.value.toLowerCase();
+    for (const [key, page] of Object.entries(pages)) {
+      if (page.url.includes(val) || (val.includes(key))) {
+        tabHistory[activeTab].back.push(tabHistory[activeTab].url);
+        tabHistory[activeTab].url = key;
+        tabHistory[activeTab].fwd = [];
+        renderPage();
+        return;
+      }
+    }
+    // Default to search
+    tabHistory[activeTab].back.push(tabHistory[activeTab].url);
+    tabHistory[activeTab].url = Array.isArray(val) ? 'search' : (val.length > 0 ? 'news' : 'search');
+    tabHistory[activeTab].fwd = [];
+    renderPage();
+  }
+});
+
+// Bookmark clicks
+document.querySelectorAll('.bookmark-item').forEach(bm => {
+  bm.addEventListener('click', () => navigateTo(bm.dataset.url));
+});
+
+// Tab switching
+document.getElementById('tabs-bar').addEventListener('click', (e) => {
+  const tab = e.target.closest('.browser-tab');
+  if (!tab) return;
+  if (e.target.classList.contains('tab-close')) {
+    closeTab(parseInt(tab.dataset.tab));
+    return;
+  }
+  switchTab(parseInt(tab.dataset.tab));
+});
+
+function switchTab(idx) {
+  document.querySelectorAll('.browser-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector(`.browser-tab[data-tab="${idx}"]`);
+  if (tab) tab.classList.add('active');
+  activeTab = idx;
+  if (!tabHistory[idx]) tabHistory[idx] = { url: 'apple', back: [], fwd: [] };
+  renderPage();
+}
+
+function closeTab(idx) {
+  if (tabCount <= 1) return;
+  delete tabHistory[idx];
+  const el = document.querySelector(`.browser-tab[data-tab="${idx}"]`);
+  if (el) el.remove();
+  if (activeTab === idx) {
+    const remaining = document.querySelector('.browser-tab');
+    if (remaining) switchTab(parseInt(remaining.dataset.tab));
+  }
+  tabCount--;
+}
+
+document.getElementById('btn-new-tab').addEventListener('click', () => {
+  tabCount++;
+  const newIdx = tabCount - 1;
+  tabHistory[newIdx] = { url: 'apple', back: [], fwd: [] };
+  const tabsBar = document.getElementById('tabs-bar');
+  const newTab = document.createElement('div');
+  newTab.className = 'browser-tab';
+  newTab.dataset.tab = newIdx;
+  newTab.innerHTML = '<span>🏠</span><span>Home</span><span class="tab-close">✕</span>';
+  tabsBar.insertBefore(newTab, document.getElementById('btn-new-tab'));
+  switchTab(newIdx);
+});
+
+// Init
+renderPage();
+
+// Click links in page content
+document.getElementById('browser-content').addEventListener('click', (e) => {
+  if (e.target.tagName === 'A') {
+    e.preventDefault();
+    navigateTo('apple');
+  }
+});
+
+window.parent.postMessage({ type: 'set-title', title: 'Safari — ' + pages.apple.title }, '*');
+</script>
+</body>
+</html>

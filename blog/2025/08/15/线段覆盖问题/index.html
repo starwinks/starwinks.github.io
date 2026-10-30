@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/19.7.0/build.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="starwinks" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  <!-- 文章页 -->
+  <meta name="description" content="总结几种常见的线段覆盖问题" />
+  
+  
+  
+  <title>
+    
+      线段覆盖问题(贪心) 
+      
+      
+      |
+    
+     starwinks
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/blog/images/favicon.png">
+    <link rel="icon" href="/blog/images/favicon.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/blog/css/main.css" />
+  <!-- 官方 Solarized Light 高亮主题 -->
+  <link rel="stylesheet" href="/blog/css/solarized-light.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+  
+    
+<link rel="stylesheet" href="/blog/css/figcaption/mac-light.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/blog/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/blog/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/blog/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/blog/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/blog/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/blog/images/avatar.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/blog/">starwinks</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/blog/">
+          <a href="/blog/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/blog/archives/">
+          <a href="/blog/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/blog/tags/">
+          <a href="/blog/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/blog/friends/">
+          <a href="/blog/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/blog/about/">
+          <a href="/blog/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/blog/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<script>
+  window.superuser_password = 'moon.starwinks08';
+</script>
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      startup: {
+        ready: function() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(function() {
+            // 统一渲染逻辑：无论什么刷新方式都等待 DOM 完全准备
+            function ensureRender() {
+              if (document.readyState === 'complete') {
+                if (MathJax.typeset) MathJax.typeset();
+              } else {
+                setTimeout(ensureRender, 50);
+              }
+            }
+            ensureRender();
+          });
+        }
+      }
+    };
+  </script>
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/blog/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">线段覆盖问题(贪心)</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2025-08-27 10:26:27
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/blog/tags/%E8%B4%AA%E5%BF%83/" title="贪心">
+                    #贪心
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+  
+  <h1 id="0-NOTE"><a href="#0-NOTE" class="headerlink" title="0. NOTE"></a>0. NOTE</h1><p>注意“线段相交”的定义，[1,2]和[3,4]算不算相交(结合实际问题)</p>
+<h1 id="1-求最多互不相交的线段数"><a href="#1-求最多互不相交的线段数" class="headerlink" title="1. 求最多互不相交的线段数"></a>1. 求最多互不相交的线段数</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1803">luogu P1803</a></p>
+<h2 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h2><p>线段右端点从小到大排序，维护右端点，依次遍历每条线段，<strong>若</strong>左端点大于(或大于等于)目前维护的右端点则答案＋1<strong>且</strong>更新右端点。</p>
+<h1 id="2-求线段总覆盖长度"><a href="#2-求线段总覆盖长度" class="headerlink" title="2. 求线段总覆盖长度"></a>2. 求线段总覆盖长度</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2082">luogu P2082</a></p>
+<h2 id="思路：-1"><a href="#思路：-1" class="headerlink" title="思路："></a>思路：</h2><p>左端点从小到大排序，遍历线段，记录左端点，维护右端点，若线段左端点小于等于右端点，右端点取max，否则累加长度，记录新的左端点。</p>
+<p>注：按此思路容易解决线段合并问题(最少可以看做几个合并后的互不相交线段)，<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2434">即luogu P2434</a></p>
+<h1 id="3-选择最少的线段覆盖给定区间"><a href="#3-选择最少的线段覆盖给定区间" class="headerlink" title="3. 选择最少的线段覆盖给定区间"></a>3. 选择最少的线段覆盖给定区间</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1668">luogu P1668</a>  </p>
+<h2 id="思路：-2"><a href="#思路：-2" class="headerlink" title="思路："></a>思路：</h2><p>采用贪心算法，线段按左端点升序排列，维护右端点，若线段左端点小于等于右端点，右端点取max,到不能遍历时ans++，更新右端点</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>例题中[1,2]和[3,4]相邻</li>
+<li>如果找不到左端点小于等于右端点要break，不然死循环</li>
+<li>right&gt;&#x3D;end后要及时break，否则ans大于答案</li>
+</ol>
+<blockquote>
+<p>本题还有dp做法，后续补充</p>
+</blockquote>
+<h1 id="4-任选最少点使每条线段内有点-点可重复使用"><a href="#4-任选最少点使每条线段内有点-点可重复使用" class="headerlink" title="4. 任选最少点使每条线段内有点(点可重复使用)"></a>4. 任选最少点使每条线段内有点(点可重复使用)</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/U248666">luogu U248666</a>  <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/description/">leetcode 452</a></p>
+<h2 id="思路：-3"><a href="#思路：-3" class="headerlink" title="思路："></a>思路：</h2><p>复用1即可，选则这些线段右端点</p>
+<h1 id="5-第四类升级：每条线段内点数量有要求"><a href="#5-第四类升级：每条线段内点数量有要求" class="headerlink" title="5.第四类升级：每条线段内点数量有要求"></a>5.第四类升级：每条线段内点数量有要求</h1><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1250">luogu P1250</a><br>思路：顺着4的思路，先将线段按右端点升序排序，之后遍历每条线段，从右端点开始种够数量，依次类推<br>建议使用数组维护已经选取的点（暴力遍历即可）</p>
+<h1 id="6-给定线段和点，取若干点使得最多线段被匹配"><a href="#6-给定线段和点，取若干点使得最多线段被匹配" class="headerlink" title="6.给定线段和点，取若干点使得最多线段被匹配"></a>6.给定线段和点，取若干点使得最多线段被<mark>匹配</mark></h1><p><mark><strong>一个点只能和一条线段匹配</strong></mark><br>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2887">luogu P2887</a></p>
+<h2 id="思路一："><a href="#思路一：" class="headerlink" title="思路一："></a>思路一：</h2><p>我们考虑给定的一个线段，如果一个点大于它的左端点，那么这个点越小“越有利”(越可能被这条线段覆盖)。那么，从贪心的角度来说，我们应该在右端左边的点中选择一个尽可能大的，这样（大于左端点的）剩下的点对于其他线段是有利的（为了保证有利性，要求剩下的点也要在其他线段左端的右边。由此我们确定了线段按左端点降序排序，点降序排序；<br>暴力遍历线段，选择满足要求的点中最大的；</p>
+<h2 id="思路二："><a href="#思路二：" class="headerlink" title="思路二："></a>思路二：</h2><p>与思路一对称，线段按右端点升序，点升序排列也可以</p>
+<p>也可以这样思考：朴素地想法是先尽量满足“中间的”线段，这是由左端点降序或者右端点升序所绝定的。然后在再考虑要选择靠近哪个方向的点，实际上那个如果已经确定了一个边界，点越靠近那个方向越有利，那么在贪心的时候就要采取反过来的策略（先来的先挑选不太好的情况）</p>
+<h1 id="7-4的对偶，点固定，线长度固定，选最少线使点全被覆盖"><a href="#7-4的对偶，点固定，线长度固定，选最少线使点全被覆盖" class="headerlink" title="7. 4的对偶，点固定，线长度固定，选最少线使点全被覆盖"></a>7. 4的对偶，点固定，线长度固定，选最少线使点全被覆盖</h1><p>例题：<a target="_blank" rel="noopener" href="https://oj.sdutacm.cn/onlinejudge3/problems/1751">SDUT 1751</a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>一个很自然地想法是以点为中心，线长度一半为臂长展开成线段，线段中心变换为点，由此又转化为问题4</p>
+<h2 id="升级1：一维变二维"><a href="#升级1：一维变二维" class="headerlink" title="升级1：一维变二维"></a>升级1：一维变二维</h2><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1325">luogu P1325</a><br>转化为要求在x轴上的线段即可（注意开double，用eps，注意-1的情况）</p>
+<h2 id="升级2：线的数量固定，反求线段最小长度"><a href="#升级2：线的数量固定，反求线段最小长度" class="headerlink" title="升级2：线的数量固定，反求线段最小长度"></a>升级2：线的数量固定，反求线段最小长度</h2><p>例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P6174">luogu P6174</a><br>二分答案即可</p>
+<h1 id="8-线段分解问题-调度问题"><a href="#8-线段分解问题-调度问题" class="headerlink" title="8.线段分解问题(调度问题)"></a>8.线段分解问题(调度问题)</h1><p>将线段分解为最少组，每组内都不能重叠</p>
+<details class="admonition warning" open>
+  <summary>Warning</summary>
+  <p>
+    这个题目不能逐个用问题1的思路解决，要按左端点升序排序！
+    可以考察这个样例：[2,3],[2,4],[4,8],[6,7]
+  </p>
+</details>
+
+<p>例题： <a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2859">luogu P2859</a><br>思路1：左端点升序排序(谁先来谁先进组)，用数组S维护每一个组的最右端点，对于每条线段，扫描S找到<em><strong>任意一个</strong></em>可以不重叠的组，进组，找不到的话新建一个组。复杂度$\mathcal{O}(n^2)$<br>思路2：在思路1的基础上,用小根堆维护每个组中线段的最右点，尝试安排新来的线段在堆顶所表示的组中。不行的话新建一个组，复杂度$\mathcal{O}(nlogn)$<br>注：如果只要求求最少要分几个组，不要求求出分组方式，可以考虑用前缀和。</p>
+
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/blog/2025/08/12/%E8%B4%AA%E5%BF%83(1)/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/blog/2025/08/16/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" target="_self">
+                <span>Next</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-NOTE"><span class="toc-text">0. NOTE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%B1%82%E6%9C%80%E5%A4%9A%E4%BA%92%E4%B8%8D%E7%9B%B8%E4%BA%A4%E7%9A%84%E7%BA%BF%E6%AE%B5%E6%95%B0"><span class="toc-text">1. 求最多互不相交的线段数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A"><span class="toc-text">思路：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%B1%82%E7%BA%BF%E6%AE%B5%E6%80%BB%E8%A6%86%E7%9B%96%E9%95%BF%E5%BA%A6"><span class="toc-text">2. 求线段总覆盖长度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A-1"><span class="toc-text">思路：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E9%80%89%E6%8B%A9%E6%9C%80%E5%B0%91%E7%9A%84%E7%BA%BF%E6%AE%B5%E8%A6%86%E7%9B%96%E7%BB%99%E5%AE%9A%E5%8C%BA%E9%97%B4"><span class="toc-text">3. 选择最少的线段覆盖给定区间</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A-2"><span class="toc-text">思路：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E4%BB%BB%E9%80%89%E6%9C%80%E5%B0%91%E7%82%B9%E4%BD%BF%E6%AF%8F%E6%9D%A1%E7%BA%BF%E6%AE%B5%E5%86%85%E6%9C%89%E7%82%B9-%E7%82%B9%E5%8F%AF%E9%87%8D%E5%A4%8D%E4%BD%BF%E7%94%A8"><span class="toc-text">4. 任选最少点使每条线段内有点(点可重复使用)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%EF%BC%9A-3"><span class="toc-text">思路：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E7%AC%AC%E5%9B%9B%E7%B1%BB%E5%8D%87%E7%BA%A7%EF%BC%9A%E6%AF%8F%E6%9D%A1%E7%BA%BF%E6%AE%B5%E5%86%85%E7%82%B9%E6%95%B0%E9%87%8F%E6%9C%89%E8%A6%81%E6%B1%82"><span class="toc-text">5.第四类升级：每条线段内点数量有要求</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%BB%99%E5%AE%9A%E7%BA%BF%E6%AE%B5%E5%92%8C%E7%82%B9%EF%BC%8C%E5%8F%96%E8%8B%A5%E5%B9%B2%E7%82%B9%E4%BD%BF%E5%BE%97%E6%9C%80%E5%A4%9A%E7%BA%BF%E6%AE%B5%E8%A2%AB%E5%8C%B9%E9%85%8D"><span class="toc-text">6.给定线段和点，取若干点使得最多线段被匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%B8%80%EF%BC%9A"><span class="toc-text">思路一：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF%E4%BA%8C%EF%BC%9A"><span class="toc-text">思路二：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-4%E7%9A%84%E5%AF%B9%E5%81%B6%EF%BC%8C%E7%82%B9%E5%9B%BA%E5%AE%9A%EF%BC%8C%E7%BA%BF%E9%95%BF%E5%BA%A6%E5%9B%BA%E5%AE%9A%EF%BC%8C%E9%80%89%E6%9C%80%E5%B0%91%E7%BA%BF%E4%BD%BF%E7%82%B9%E5%85%A8%E8%A2%AB%E8%A6%86%E7%9B%96"><span class="toc-text">7. 4的对偶，点固定，线长度固定，选最少线使点全被覆盖</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%87%E7%BA%A71%EF%BC%9A%E4%B8%80%E7%BB%B4%E5%8F%98%E4%BA%8C%E7%BB%B4"><span class="toc-text">升级1：一维变二维</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%87%E7%BA%A72%EF%BC%9A%E7%BA%BF%E7%9A%84%E6%95%B0%E9%87%8F%E5%9B%BA%E5%AE%9A%EF%BC%8C%E5%8F%8D%E6%B1%82%E7%BA%BF%E6%AE%B5%E6%9C%80%E5%B0%8F%E9%95%BF%E5%BA%A6"><span class="toc-text">升级2：线的数量固定，反求线段最小长度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-%E7%BA%BF%E6%AE%B5%E5%88%86%E8%A7%A3%E9%97%AE%E9%A2%98-%E8%B0%83%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="toc-text">8.线段分解问题(调度问题)</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/blog/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/starwinks">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+        <li>
+          
+            <a title="email" href="mailto:starwinks@foxmail.com">
+              <i class="iconfont icon-envelope"></i>
+            </a>
+            
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/starwinks">Copyright © 2025 starwinks</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+  <!-- 超级用户密码输入框 -->
+  <div id="superuser-password" style="text-align:center;margin:8px 0;">
+  <!-- 超级用户入口已隐藏，无任何可见元素 -->
+  </div>
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/blog/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/blog/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/blog/js/colorscheme.js"></script>
+
+
+
+
+
+        
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,919 @@
+/* ==========================================================================
+   Academic Website Template — personal/academic site
+   Inter webfont + refined minimal theme with light/dark toggle.
+   Pure CSS, no build step, no JS dependency.
+   ========================================================================== */
+
+/* Font: Inter, loaded via Google Fonts <link> in index.html head. */
+
+/* ---- Theme tokens ------------------------------------------------------- */
+:root {
+  --bg:           #ffffff;
+  --surface:      #f6f8fa;
+  --text:         #1e1e1f;
+  --text-muted:   #6a6f76;
+  --accent:       #1772d0;
+  --accent-soft:  rgba(23, 114, 208, 0.09);
+  --accent-hover: #f09228;
+  --border:       #e6e8eb;
+  --border-strong:#d0d4d9;
+  --badge-bg:     #1772d0;
+  --badge-text:   #ffffff;
+  --highlight:    #fff3c4;
+  --nav-bg:       rgba(255, 255, 255, 0.82);
+  --shadow:       0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+/* Dark theme is opt-in via the toggle button (sets data-theme="dark").
+   Light is the default. */
+:root[data-theme="dark"] {
+  --bg:           #101317;
+  --surface:      #191d23;
+  --text:         #e7e9ec;
+  --text-muted:   #9aa1ab;
+  --accent:       #6aa9f0;
+  --accent-soft:  rgba(106, 169, 240, 0.14);
+  --accent-hover: #f5b657;
+  --border:       #262b32;
+  --border-strong:#333a43;
+  --badge-bg:     #2f6ac4;
+  --badge-text:   #f3f7fc;
+  --highlight:    #4a4326;
+  --nav-bg:       rgba(16, 19, 23, 0.82);
+  --shadow:       0 1px 2px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ---- Base --------------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  padding: 24px 16px 48px;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+td,
+th,
+tr,
+p,
+a,
+li,
+span {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.68;
+}
+
+p { margin: 0 0 12px; }
+
+strong {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:focus,
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: none;
+}
+
+/* ---- Headings ----------------------------------------------------------- */
+.name {
+  padding-top: 8px;
+  margin: 0 0 4px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 46px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+h2 {
+  position: relative;
+  margin: 0 0 4px;
+  padding-bottom: 8px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+/* ---- Publications ------------------------------------------------------- */
+.pub-year {
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin: 0;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* the row wrapper for each paper — subtle hover lift */
+tr[id] > td,
+.pub-row > td {
+  transition: background-color 0.15s ease;
+}
+
+tr[id]:hover > td {
+  background-color: var(--accent-soft);
+}
+
+tr[id] > td:first-child { border-radius: 8px 0 0 8px; }
+tr[id] > td:last-child  { border-radius: 0 8px 8px 0; }
+
+.pub-badge {
+  display: inline-block;
+  max-width: 100%;
+  background-color: var(--badge-bg);
+  color: var(--badge-text);
+  padding: 3px 9px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border: none;
+  border-radius: 6px;
+  white-space: normal;   /* wrap long venue labels instead of overflowing */
+  font-style: normal;
+}
+
+.pub-badge a,
+.pub-badge a:hover,
+.pub-badge a:focus {
+  color: var(--badge-text) !important;
+  text-decoration: none !important;
+}
+
+.pub-title {
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.45;
+  margin-bottom: 2px;
+}
+
+.pub-title a {
+  color: var(--text);
+}
+
+.pub-title a:hover {
+  color: var(--accent);
+}
+
+/* Featured rows use a hardcoded light bgcolor="#ffffd0" (works in both themes),
+   so force dark, readable text there instead of the theme's default --text. */
+tr[bgcolor] .pub-title a,
+tr[bgcolor] .pub-year,
+tr[bgcolor] td {
+  color: #1a1a1a;
+}
+tr[bgcolor] .pub-title a:hover {
+  color: #b45309;
+}
+
+.pub-thumb {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 4px 0 8px;
+}
+
+.pub-links {
+  margin-top: 7px;
+}
+
+.pub-links a {
+  display: inline-block;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  padding: 3px 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-right: 4px;
+  margin-top: 4px;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.pub-links a:hover,
+.pub-links a:focus {
+  color: var(--accent);
+  border-color: var(--accent);
+  background-color: var(--accent-soft);
+  text-decoration: none;
+}
+
+.pub-hidden {
+  font-size: 16.5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease, margin 0.2s ease, padding 0.2s ease;
+  text-align: justify;
+}
+
+.pub-hidden.open {
+  max-height: 200em;
+}
+
+.pub-hidden p {
+  line-height: 1.6;
+  margin: 8px 0;
+  color: var(--text-muted);
+}
+
+.pub-hidden pre {
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.pub-abstract.open {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 12px;
+  margin-top: 8px;
+  background: var(--surface);
+}
+
+/* ---- Lists (talks, media, bio) ----------------------------------------- */
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+/* ---- Profile photo ------------------------------------------------------ */
+.profile-photo {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+  border: 3px solid var(--bg);
+  outline: 1px solid var(--border);
+}
+
+/* ---- Misc helpers ------------------------------------------------------- */
+span.highlight,
+.highlight {
+  background-color: var(--highlight);
+  border-radius: 4px;
+  padding: 0 3px;
+}
+
+.subtle { color: var(--text-muted); }
+
+.small {
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+/* ---- Theme toggle button ------------------------------------------------ */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+
+/* Show the moon in light mode (click → dark), the sun in dark mode. */
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+/* ---- Reduced motion ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+
+/* ---- Print (clean CV printout) ------------------------------------------ */
+@media print {
+  :root {
+    --bg: #ffffff;
+    --text: #000000;
+    --text-muted: #333333;
+    --accent: #000000;
+    --border: #cccccc;
+    --surface: #ffffff;
+  }
+  body { padding: 0; font-size: 11pt; }
+  .theme-toggle { display: none !important; }
+  a { color: #000 !important; }
+  /* expand collapsed abstracts / bibtex so nothing is lost on paper */
+  .pub-hidden { max-height: none !important; overflow: visible !important; }
+  .pub-badge {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+  }
+  tr[id]:hover > td { background: transparent !important; }
+  h2, .pub-title, li { page-break-after: avoid; }
+  tr[id] { page-break-inside: avoid; }
+}
+
+/* ---- Responsive header -------------------------------------------------- */
+@media (max-width: 620px) {
+  .header-table,
+  .header-table tbody,
+  .header-table tr,
+  .header-table td {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .header-photo {
+    padding-top: 4px !important;
+    text-align: center;
+  }
+
+  .profile-photo {
+    max-width: 190px;
+  }
+
+  .name {
+    font-size: 34px;
+  }
+}
+
+/* ==========================================================================
+   Top navigation
+   ========================================================================== */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topnav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+}
+
+.topnav-brand {
+  font-weight: 800;
+  font-size: 18.5px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-right: auto;
+  white-space: nowrap;
+}
+.topnav-brand:hover { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: 2px;
+  flex-wrap: nowrap;
+}
+
+.topnav-links a {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px 11px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.topnav-links a:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.topnav-links a.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* toggle sits inside the nav now */
+.topnav .theme-toggle {
+  position: static;
+  width: 36px;
+  height: 36px;
+  box-shadow: none;
+  flex: none;
+}
+
+/* offset anchor targets so they clear the sticky bar */
+.section-anchor { scroll-margin-top: 68px; }
+
+/* ==========================================================================
+   Social + contact
+   ========================================================================== */
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.social-links a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.social-links svg { width: 15px; height: 15px; flex: none; }
+
+.contact-line {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 17px;
+  margin: 6px 0 0;
+}
+.contact-line svg {
+  width: 15px; height: 15px;
+  vertical-align: -3px;
+  margin-right: 5px;
+  color: var(--accent);
+}
+.contact-line a { color: var(--text-muted); }
+.contact-line a:hover { color: var(--accent); }
+
+/* ==========================================================================
+   Section headings with icon
+   ========================================================================== */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.section-head h2 { margin-bottom: 0; }
+.section-head .sec-icon {
+  width: 22px; height: 22px;
+  color: var(--accent);
+  flex: none;
+}
+
+/* ==========================================================================
+   Publication link icons
+   ========================================================================== */
+.pub-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.pub-links a svg { width: 12px; height: 12px; flex: none; }
+
+/* ==========================================================================
+   BibTeX copy button
+   ========================================================================== */
+.cite-wrap { position: relative; }
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+.copy-btn.copied { color: #12864a; border-color: #12864a; }
+:root[data-theme="dark"] .copy-btn.copied { color: #4ade80; border-color: #4ade80; }
+.copy-btn svg { width: 13px; height: 13px; }
+
+/* ==========================================================================
+   Talks
+   ========================================================================== */
+.entry-list { display: flex; flex-direction: column; }
+
+.entry {
+  display: flex;
+  gap: 16px;
+  padding: 13px 10px;
+  border-radius: 10px;
+  transition: background-color 0.15s ease;
+}
+.entry:hover { background: var(--accent-soft); }
+.entry + .entry { border-top: 1px solid var(--border); }
+.entry:hover + .entry,
+.entry:hover { border-top-color: transparent; }
+
+.entry-year {
+  flex: none;
+  width: 90px;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 2px;
+}
+.entry-body .entry-title { font-weight: 700; font-size: 18px; line-height: 1.45; }
+.entry-body .entry-meta {
+  color: var(--text-muted);
+  font-size: 16.5px;
+  margin-top: 3px;
+}
+.entry-tag {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 5px;
+  padding: 1px 7px;
+  margin-right: 6px;
+  vertical-align: 1px;
+}
+
+/* ==========================================================================
+   Media
+   ========================================================================== */
+.media-icon {
+  flex: none;
+  width: 34px; height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.media-icon svg { width: 18px; height: 18px; }
+
+/* ==========================================================================
+   Bio (CV grid)
+   ========================================================================== */
+.bio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px 34px;
+}
+.bio-block { min-width: 0; }
+.bio-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 18.5px;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.bio-head svg { width: 18px; height: 18px; color: var(--accent); flex: none; }
+
+.bio-entry {
+  display: flex;
+  gap: 14px;
+  padding: 5px 0;
+}
+.bio-entry + .bio-entry { border-top: 1px dashed var(--border); }
+.bio-entry .bio-year {
+  flex: none;
+  width: 112px;
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 600;
+  padding-top: 2px;
+}
+.bio-entry .bio-desc { font-size: 16.5px; line-height: 1.55; }
+.bio-entry .bio-sub {
+  display: block;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+/* ---- Beyond Research (personal) ---------------------------------------- */
+.personal-text {
+  font-size: 16.5px;
+  line-height: 1.62;
+  margin: 0;
+}
+.hike-intro {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+.hike-note {
+  font-style: italic;
+  font-size: 13.5px;
+  margin-top: -4px;
+}
+.hike-list { display: flex; flex-direction: column; }
+.hike { padding: 9px 0; cursor: pointer; }
+.hike + .hike { border-top: 1px dashed var(--border); }
+.hike-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hike-name { font-weight: 600; }
+.hike-year {
+  color: var(--text-muted);
+  font-size: 14.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.hike-meta {
+  color: var(--text-muted);
+  font-size: 14.5px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease, margin-top 0.2s ease;
+}
+.hike-thumb {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease, margin-top 0.2s ease;
+}
+.hike-thumb img {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.hike:hover .hike-meta,
+.hike.open .hike-meta {
+  max-height: 4em;
+  opacity: 1;
+  margin-top: 1px;
+}
+.hike:hover .hike-thumb,
+.hike.open .hike-thumb {
+  max-height: 220px;
+  opacity: 1;
+  margin-top: 10px;
+}
+
+@media (max-width: 620px) {
+  .topnav-brand { display: none; }
+  .topnav-inner { justify-content: space-between; }
+  .topnav-links { margin-right: auto; }
+  .bio-grid { grid-template-columns: 1fr; gap: 22px; }
+  .entry-year { width: 50px; }
+}
+
+/* ==========================================================================
+   Collapsible publications
+   ========================================================================== */
+/* Fixed layout so long collapsed BibTeX / titles can't force the table
+   (and the whole page) wider than the viewport on small screens. */
+.pub-table { table-layout: fixed; width: 100%; }
+
+.pub-title,
+.entry-title,
+.entry-meta { overflow-wrap: break-word; }
+
+.pub-titlerow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.pub-titlerow .pub-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.pub-expand {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-top: -2px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.pub-expand:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.pub-expand svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+.pub-expand.open svg { transform: rotate(180deg); }
+
+/* Whole collapsed row is clickable to expand (title link still navigates). */
+.pub-clickable > td { cursor: pointer; }
+.pub-clickable .pub-details,
+.pub-clickable .pub-details * { cursor: auto; }
+.pub-clickable .pub-details a,
+.pub-clickable .pub-expand,
+.pub-clickable .pub-title a { cursor: pointer; }
+
+.pub-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.2s ease, margin-top 0.2s ease;
+}
+.pub-details.open {
+  max-height: 240em;
+  opacity: 1;
+  margin-top: 7px;
+}
+
+.expand-all {
+  margin-left: auto;
+  flex: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.expand-all:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ==========================================================================
+   Section-heading anchor links
+   ========================================================================== */
+.head-anchor {
+  opacity: 0;
+  margin-left: 4px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.section-head:hover .head-anchor,
+.head-anchor:focus {
+  opacity: 1;
+}
+.head-anchor:hover { color: var(--accent); }
+
+/* ==========================================================================
+   Clickable media rows
+   ========================================================================== */
+.entry-link { cursor: pointer; }
+
+/* ==========================================================================
+   Back to top
+   ========================================================================== */
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 60;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text-muted);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.back-to-top:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.back-to-top svg { width: 20px; height: 20px; }
+
+@media print {
+  .back-to-top,
+  .pub-expand,
+  .expand-all,
+  .head-anchor { display: none !important; }
+  .pub-details {
+    max-height: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    margin-top: 7px !important;
+  }
+}
